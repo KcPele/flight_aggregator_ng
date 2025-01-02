@@ -1,0 +1,246 @@
+{
+  "Nigeria": [
+    {
+      "city": "ABV",
+      "code": "ABV",
+      "country": "NG",
+      "cityName": "Abuja",
+      "countryName": "Nigeria",
+      "portName": "ABUJA INT",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Abuja (ABV)"
+    },
+    {
+      "city": "AKR",
+      "code": "AKR",
+      "country": "NG",
+      "cityName": "Akure",
+      "countryName": "Nigeria",
+      "portName": "Akure",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Akure (AKR)"
+    },
+    {
+      "city": "ANA",
+      "code": "ANA",
+      "country": "NG",
+      "cityName": "Anambra",
+      "countryName": "Nigeria",
+      "portName": "Anambra INT",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Anambra (ANA)"
+    },
+    {
+      "city": "ABB",
+      "code": "ABB",
+      "country": "NG",
+      "cityName": "ASABA",
+      "countryName": "Nigeria",
+      "portName": "Asaba",
+      "timeZone": null,
+      "image": null,
+      "displayText": "ASABA (ABB)"
+    },
+    {
+      "city": "BNI",
+      "code": "BNI",
+      "country": "NG",
+      "cityName": "Benincity",
+      "countryName": "Nigeria",
+      "portName": "BENIN",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Benincity (BNI)"
+    },
+    {
+      "city": "CBQ",
+      "code": "CBQ",
+      "country": "NG",
+      "cityName": "Calabar",
+      "countryName": "Nigeria",
+      "portName": "Calabar",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Calabar (CBQ)"
+    },
+    {
+      "city": "ENU",
+      "code": "ENU",
+      "country": "NG",
+      "cityName": "Enugu",
+      "countryName": "Nigeria",
+      "portName": "ENUGU",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Enugu (ENU)"
+    },
+    {
+      "city": "GMO",
+      "code": "GMO",
+      "country": "NG",
+      "cityName": "Gombe",
+      "countryName": "Nigeria",
+      "portName": "Gombe",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Gombe (GMO)"
+    },
+    {
+      "city": "ILR",
+      "code": "ILR",
+      "country": "NG",
+      "cityName": "Ilorin",
+      "countryName": "Nigeria",
+      "portName": "ILORIN",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Ilorin (ILR)"
+    },
+    {
+      "city": "JOS",
+      "code": "JOS",
+      "country": "NG",
+      "cityName": "Jos",
+      "countryName": "Nigeria",
+      "portName": "Yakubu Gowon Airport",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Jos (JOS)"
+    },
+    {
+      "city": "KAD",
+      "code": "KAD",
+      "country": "NG",
+      "cityName": "Kaduna",
+      "countryName": "Nigeria",
+      "portName": "KADUNA",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Kaduna (KAD)"
+    },
+    {
+      "city": "KAN",
+      "code": "KAN",
+      "country": "NG",
+      "cityName": "Kano",
+      "countryName": "Nigeria",
+      "portName": "MALLAM AM",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Kano (KAN)"
+    },
+    {
+      "city": "MIU",
+      "code": "MIU",
+      "country": "NG",
+      "cityName": "Maiduguri",
+      "countryName": "Nigeria",
+      "portName": "Maiduguri",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Maiduguri (MIU)"
+    },
+    {
+      "city": "LOS",
+      "code": "LOS",
+      "country": "NG",
+      "cityName": "Lagos",
+      "countryName": "Nigeria",
+      "portName": "Murtala Muhammed International Airport",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Lagos (LOS)"
+    },
+    {
+      "city": "SKO",
+      "code": "SKO",
+      "country": "NG",
+      "cityName": "Sokoto",
+      "countryName": "Nigeria",
+      "portName": "Sadiq Abubakar III International Airport",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Sokoto (SKO)"
+    },
+    {
+      "city": "QOW",
+      "code": "QOW",
+      "country": "NG",
+      "cityName": "Owerri",
+      "countryName": "Nigeria",
+      "portName": "Owerri",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Owerri (QOW)"
+    },
+    {
+      "city": "PHC",
+      "code": "PHC",
+      "country": "NG",
+      "cityName": "Portharcourt",
+      "countryName": "Nigeria",
+      "portName": "PORT HARC",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Portharcourt (PHC)"
+    },
+    {
+      "city": "QUO",
+      "code": "QUO",
+      "country": "NG",
+      "cityName": "Uyo",
+      "countryName": "Nigeria",
+      "portName": "Uyo",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Uyo (QUO)"
+    },
+    {
+      "city": "QRW",
+      "code": "QRW",
+      "country": "NG",
+      "cityName": "Warri",
+      "countryName": "Nigeria",
+      "portName": "Warri",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Warri (QRW)"
+    },
+    {
+      "city": "YOL",
+      "code": "YOL",
+      "country": "NG",
+      "cityName": "Yola",
+      "countryName": "Nigeria",
+      "portName": "YOLA",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Yola (YOL)"
+    },
+    {
+      "city": "BCU",
+      "code": "BCU",
+      "country": "NG",
+      "cityName": "Bauchi",
+      "countryName": "Nigeria",
+      "portName": "Sir Abubakar Tafawa Balewa Airport",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Bauchi (BCU)"
+    },
+    {
+      "city": "KEB",
+      "code": "KEB",
+      "country": "NG",
+      "cityName": "Kebbi",
+      "countryName": "Nigeria",
+      "portName": "Sir Ahmadu Bello International Airport",
+      "timeZone": null,
+      "image": null,
+      "displayText": "Kebbi (KEB)"
+    }
+  ]
+}

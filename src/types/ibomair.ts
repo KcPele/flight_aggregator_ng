@@ -1,19 +1,40 @@
-export type ibomairDataType = Array<{
-  departure: {
-    time: string;
-    airport: string;
-    date: string;
-  };
-  arrival: {
-    time: string;
-    airport: string;
-    date: string;
-  };
+// types/ibomair.ts
+
+export interface FlightTimeLocation {
+  time: string;
+  airport: string;
+  date: string;
+}
+
+export interface IbomAirFare {
+  fareType: string;
+  price: string;
+}
+
+export interface IbomAirFlight {
+  departure: FlightTimeLocation;
+  arrival: FlightTimeLocation;
   flightNumber: string;
   duration: string;
   stops: string;
-  fares: Array<{
-    fareType: string;
-    price: string;
-  }>;
-}>;
+  fares: IbomAirFare[];
+}
+
+export interface PassengerCount {
+  adult: number;
+  child: number;
+  infant: number;
+}
+
+export interface IbomAirSearchParams {
+  tripType: "ONE_WAY" | "ROUND_TRIP";
+  depPort: string;
+  arrPort: string;
+  date: string; // DD MMM YYYY format
+  passengers: PassengerCount;
+  _sid?: string;
+  _cid?: string;
+  accountCode?: string;
+}
+
+export type IbomAirFlightData = IbomAirFlight[];

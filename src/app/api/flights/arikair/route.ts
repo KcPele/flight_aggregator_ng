@@ -10,7 +10,11 @@ export async function GET(request: Request) {
     const depPort = searchParams.get("depPort");
     const arrPort = searchParams.get("arrPort");
     const dateStr = searchParams.get("date"); // Expects ISO date string
-    const cabinClass = searchParams.get("cabinClass");
+
+    // Parse passenger counts
+    const adult = parseInt(searchParams.get("adult") || "1");
+    const child = parseInt(searchParams.get("child") || "0");
+    const infant = parseInt(searchParams.get("infant") || "0");
 
     // Validate required parameters
     if (!tripType || !depPort || !arrPort || !dateStr) {
@@ -34,14 +38,20 @@ export async function GET(request: Request) {
       depPort,
       arrPort,
       date,
-      cabinClass,
+      inlineRadioOptions: "on",
+      passengers: { adult, child, infant },
     });
-    console.log(flights);
 
     return NextResponse.json({
       provider: "Arik Air",
       flights,
-      searchParams: { tripType, depPort, arrPort, date: dateStr, cabinClass },
+      searchParams: {
+        tripType,
+        depPort,
+        arrPort,
+        date: dateStr,
+        passengers: { adult, child, infant },
+      },
     });
   } catch (error) {
     console.error("Error in Arik Air API route:", error);

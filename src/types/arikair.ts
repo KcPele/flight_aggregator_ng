@@ -1,5 +1,11 @@
 // types/arikair.ts
 
+export interface ArikAirPassengers {
+  adult: number;
+  child: number;
+  infant: number;
+}
+
 export interface ArikAirFlight {
   departureTime: string;
   arrivalTime: string;
@@ -13,10 +19,11 @@ export interface ArikAirFlight {
 
 export interface ArikAirSearchParams {
   tripType: "ONE_WAY" | "ROUND_TRIP";
+  inlineRadioOptions: "on";
   depPort: string;
   arrPort: string;
-  date: string; // DD MMM YYYY format
-  cabinClass?: string;
+  date: string;
+  passengers: ArikAirPassengers;
   _sid?: string;
   _cid?: string;
 }

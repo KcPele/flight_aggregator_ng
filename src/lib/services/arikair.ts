@@ -1,37 +1,81 @@
 // lib/services/arikair.ts
 import { load } from "cheerio";
 import { format } from "date-fns";
-import { v4 as uuidv4 } from "uuid";
-import { ArikAirSearchParams, ArikAirFlightData } from "@/types/arikair";
+import {
+  ArikAirSearchParams,
+  ArikAirFlightData,
+  ArikAirPassengers,
+} from "@/types/arikair";
 
 export class ArikAirService {
-  private readonly BASE_URL =
-    "https://arikair.crane.aero/ibe/availability/create";
+  private readonly BASE_URL = "https://arikair.crane.aero";
+  private readonly SESSION_URL = `${this.BASE_URL}/ibe/home`;
+  private readonly SEARCH_URL = `${this.BASE_URL}/ibe/availability/create`;
 
-  private generateSessionId(): string {
-    return uuidv4();
-  }
+  private async initializeSession(): Promise<{
+    cookies: string;
+    sid: string;
+    cid: string;
+  }> {
+    try {
+      const response = await fetch(this.SESSION_URL, {
+        method: "GET",
+        headers: {
+          Accept:
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        },
+      });
 
-  private generateClientId(): string {
-    return uuidv4();
+      if (!response.ok) {
+        throw new Error("Failed to initialize session");
+      }
+
+      const cookies = response.headers.get("set-cookie") || "";
+      const html = await response.text();
+      const $ = load(html);
+
+      // Extract session and client IDs from the page
+      const sid = $('input[name="_sid"]').val() as string;
+      const cid = $('input[name="_cid"]').val() as string;
+
+      if (!sid || !cid) {
+        throw new Error("Failed to extract session or client ID");
+      }
+
+      return { cookies, sid, cid };
+    } catch (error) {
+      console.error("Error initializing session:", error);
+      throw error;
+    }
   }
 
   private formatDate(date: Date): string {
     return format(date, "dd MMM yyyy");
   }
 
-  private buildUrl(params: ArikAirSearchParams): string {
-    const searchParams = new URLSearchParams({
-      _sid: params._sid || this.generateSessionId(),
-      _cid: params._cid || this.generateClientId(),
+  private buildSearchUrl(params: ArikAirSearchParams): string {
+    // Start with base parameters
+    const baseParams = new URLSearchParams({
+      _sid: params._sid!,
+      _cid: params._cid!,
       tripType: params.tripType,
+      inlineRadioOptions: "on",
       depPort: params.depPort,
       arrPort: params.arrPort,
       date: params.date,
-      cabinClass: params.cabinClass || "",
     });
 
-    return `${this.BASE_URL}?${searchParams.toString()}`;
+    // Add passenger parameters
+    baseParams.append("passengerType", "ADLT");
+    baseParams.append("quantity", params.passengers.adult.toString());
+    baseParams.append("passengerType", "CHLD");
+    baseParams.append("quantity", params.passengers.child.toString());
+    baseParams.append("passengerType", "INFT");
+    baseParams.append("quantity", params.passengers.infant.toString());
+
+    return `${this.SEARCH_URL}?${baseParams.toString()}`;
   }
 
   private parseHTML(html: string): ArikAirFlightData {
@@ -100,20 +144,35 @@ export class ArikAirService {
     params: Omit<ArikAirSearchParams, "_sid" | "_cid"> & { date: Date }
   ): Promise<ArikAirFlightData> {
     try {
+      // Initialize session first
+      const { cookies, sid, cid } = await this.initializeSession();
+
+      // Prepare search parameters with valid session
       const formattedParams: ArikAirSearchParams = {
         ...params,
         date: this.formatDate(params.date),
-        _sid: this.generateSessionId(),
-        _cid: this.generateClientId(),
+        _sid: sid,
+        _cid: cid,
+        inlineRadioOptions: "on",
+        passengers: {
+          adult: params.passengers.adult || 1,
+          child: params.passengers.child || 0,
+          infant: params.passengers.infant || 0,
+        },
       };
 
-      const url = this.buildUrl(formattedParams);
-      console.log(url);
-      const response = await fetch(url, {
+      // Make the search request with session cookies
+      const searchUrl = this.buildSearchUrl(formattedParams);
+      console.log("Search URL:", searchUrl);
+
+      const response = await fetch(searchUrl, {
         headers: {
-          Accept: "text/html",
+          Accept:
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
           "User-Agent":
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+          Cookie: cookies,
+          Referer: this.SESSION_URL,
         },
       });
 

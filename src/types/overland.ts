@@ -1,4 +1,37 @@
 // types/overland.ts
+export interface OverlandFlightClassInfo {
+  flightNumber: string;
+  fareClass: string;
+  price: number;
+  available: boolean;
+  duration: string;
+  baggageAllowance: string;
+  fareRules: string;
+}
+
+export interface OverlandFlightDetails {
+  departureTime: string;
+  arrivalTime: string;
+  departureDate: string;
+  arrivalDate: string;
+  departureAirport: string;
+  arrivalAirport: string;
+  flightNumber: string;
+  operatingAirline: string;
+  duration: string;
+  stops: string[];
+  via: string[];
+  fareClasses: OverlandFlightClassInfo[];
+}
+
+export interface OverlandSearchParams {
+  type: "OW" | "RT"; // One-way or Round-trip
+  fromDst: string; // Departure airport code
+  toDst: string; // Arrival airport code
+  adults: number;
+  children: number;
+  infants: number;
+}
 
 export interface OverlandCalendarDay {
   daynumber: string;
@@ -18,14 +51,27 @@ export interface OverlandCalendarMonth {
 
 export interface OverlandFlightData {
   hasResults: boolean;
-  calendar: OverlandCalendarMonth[];
+  flights: OverlandFlightDetails[];
 }
 
-export interface OverlandSearchParams {
-  type: 'OW' | 'RT';
-  adults: number;
-  children: number;
-  infants: number;
-  fromDst: string;
-  toDst: string;
+//temporal
+export interface CalendarDay {
+  daynumber: string;
+  fullDate: string;
+  fare: number | false;
+  highlight: boolean;
+  farebackup: boolean;
+  flight: boolean;
+}
+
+export interface CalendarMonth {
+  year: string;
+  monthname: string;
+  monthnumber: string;
+  days: CalendarDay[];
+}
+
+export interface CalendarResponse {
+  hasResults: boolean;
+  calendar: CalendarMonth[];
 }

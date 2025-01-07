@@ -89,3 +89,28 @@ export type greenAfricaDataType = {
   };
   message: string;
 };
+
+export interface GreenAfricaFlight {
+  departureTime: string;
+  arrivalTime: string;
+  departurePort: string;
+  arrivalPort: string;
+  flightNumber: string;
+  duration: string;
+  price: string;
+  seatsAvailable: string;
+  fareTypes: {
+    name: string;
+    price: string;
+    benefits: string[];
+  }[];
+}
+
+export interface GreenAfricaSearchParams {
+  origin: string;
+  destination: string;
+  departure: Date;
+  adults: number;
+  children: number;
+  infants: number;
+}

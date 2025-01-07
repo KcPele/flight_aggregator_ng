@@ -39,11 +39,9 @@ export async function GET(request: Request) {
       infants,
     });
 
-    const availableFlights = overlandService.getAvailableFlights(flightData);
-
     return NextResponse.json({
       provider: "Overland Airways",
-      flights: availableFlights,
+      data: flightData,
       searchParams: {
         type,
         fromDst,

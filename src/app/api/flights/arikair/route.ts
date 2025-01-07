@@ -50,7 +50,7 @@ export async function GET(request: Request) {
       },
     });
 
-    return NextResponse.json({ flights });
+    return NextResponse.json({ flights, provider: "arikair" });
   } catch (error) {
     console.error("API Error:", error);
     return NextResponse.json(

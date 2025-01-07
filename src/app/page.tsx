@@ -8,7 +8,7 @@ export default function Home() {
           tripType: "ONE_WAY",
           depPort: "LOS",
           arrPort: "ABV",
-          date: "2025-01-20", // ISO date string
+          date: "2025-01-10", // ISO date string
           adult: "1",
           child: "0",
           infant: "0",

@@ -4,6 +4,16 @@ import { format } from "date-fns";
 import { ArikAirSearchParams, ArikAirFlightData } from "@/types/arikair";
 
 export class ArikAirService {
+  private static sessionData: {
+    cookies?: string[];
+    sid?: string;
+    cid?: string;
+  } = {};
+
+  async initSession(): Promise<void> {
+    const { cookies, sid, cid } = await this.getCookiesAndTokens();
+    ArikAirService.sessionData = { cookies, sid, cid };
+  }
   private readonly BASE_URL = "https://arikair.crane.aero";
   private readonly SESSION_URL = `${this.BASE_URL}/ibe/home`;
   private readonly SEARCH_URL = `${this.BASE_URL}/ibe/availability/create`;

@@ -6,6 +6,8 @@ export const runtime = "edge";
 
 export async function GET(request: Request) {
   try {
+    const service = new ArikAirService();
+    await service.initSession();
     const { searchParams } = new URL(request.url);
 
     const tripType = searchParams.get("tripType");
@@ -34,7 +36,7 @@ export async function GET(request: Request) {
       );
     }
 
-    const service = new ArikAirService();
+    // const service = new ArikAirService();
     const flights = await service.searchFlights({
       tripType,
       depPort,

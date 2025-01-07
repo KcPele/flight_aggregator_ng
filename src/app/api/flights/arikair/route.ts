@@ -2,8 +2,6 @@
 import { NextResponse } from "next/server";
 import { ArikAirService } from "@/lib/services/arikair";
 
-export const runtime = "edge";
-
 export async function GET(request: Request) {
   try {
     const service = new ArikAirService();

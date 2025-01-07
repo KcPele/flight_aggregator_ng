@@ -2,6 +2,7 @@
 import { format } from "date-fns";
 import { load } from "cheerio";
 import { valueJetDataType } from "@/types/valuejet";
+import { scrapper } from "../helper";
 
 interface ValueJetSearchParams {
   dep: string;
@@ -12,73 +13,186 @@ interface ValueJetSearchParams {
   infants: number;
 }
 
-interface ValueJetFlight {
-  departureTime: string;
-  arrivalTime: string;
-  departurePort: string;
-  arrivalPort: string;
-  flightNumber: string;
-  duration: string;
+interface FlightFare {
+  type: string;
   price: string;
-  fareTypes: {
-    name: string;
+}
+
+interface ValueJetFlight {
+  flightNumber: string;
+  departure: {
+    time: string;
+    period: string;
+    location: string;
+    airport?: string;
+  };
+  arrival: {
+    time: string;
+    period: string;
+    location: string;
+    airport?: string;
+  };
+  duration: string;
+  basePrice: string;
+  flightInfo?: {
+    status: string;
+    statusUrl?: string;
+  };
+  selectedDate?: {
+    date: string;
     price: string;
-  }[];
-  seatsRemaining?: string;
+  };
+  otherDates?: Array<{
+    date: string;
+    price: string;
+  }>;
 }
 
 export class ValueJetService {
-  private readonly BASE_URL = "https://api.flyvaluejet.com";
-  private readonly API_URL = `${this.BASE_URL}/ibe/flight/search/dates`;
+  private readonly BASE_URL = "https://flyvaluejet.com/flight-result";
 
+  private buildRequestInfo(params: ValueJetSearchParams): string {
+    return `dep:${params.dep},arr:${params.arr},on:${format(
+      params.departure,
+      "yyyy-MM-dd"
+    )},till:,p.a:${params.adults},p.c:${params.children},p.i:${params.infants}`;
+  }
   async searchFlights(params: ValueJetSearchParams): Promise<ValueJetFlight[]> {
     try {
-      const searchParams = new URLSearchParams({
-        on: format(params.departure, "yyyy-MM-dd"),
-        to: params.arr,
-        from: params.dep,
-        adult: params.adults.toString(),
-        child: params.children.toString(),
-        infant: params.infants.toString(),
+      const requestInfo = this.buildRequestInfo(params);
+      const html = await scrapper({
+        url: `${this.BASE_URL}?requestInfo=${requestInfo}`,
+        flightType: "valuejet",
       });
 
-      const response = await fetch(
-        `${this.API_URL}/?${searchParams.toString()}`,
-        {
-          headers: {
-            Accept: "application/json",
-            "User-Agent":
-              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch flights");
-      }
-
-      const data = await response.json();
-      console.log(data);
-      return this.parseFlights(data, params);
+      return this.parseFlights(html);
     } catch (error) {
       console.error("ValueJet API Error:", error);
       throw error;
     }
   }
 
-  private parseFlights(
-    data: any,
-    params: ValueJetSearchParams
-  ): ValueJetFlight[] {
-    if (!data.data?._ || !data.data.bounds) {
-      return [];
-    }
+  parseFlights(html: string): ValueJetFlight[] {
+    const $ = load(html);
+    const flights: ValueJetFlight[] = [];
 
-    return data.data._.map((combination: any) => ({
-      date: combination.combinations[0].date,
-      departurePort: params.dep,
-      arrivalPort: params.arr,
-      price: combination.amount.value.toString(),
-    }));
+    // Parse flight dates and prices first
+    const dateGrid = $(".grid.grid-cols-5.gap-0.items-center.px-6");
+    const datePrices: Record<string, string> = {};
+    const selectedDate = {
+      date: "",
+      price: "",
+    };
+
+    dateGrid
+      .find(".w-full.focus\\:shadow-outline.col-span-1")
+      .each((_, dateEl) => {
+        const dateDiv = $(dateEl).find("div");
+        const date = dateDiv.find("span").first().text().trim();
+        const price = dateDiv.find("span").last().text().trim();
+
+        if (dateDiv.hasClass("bg-primary")) {
+          selectedDate.date = date;
+          selectedDate.price = price;
+        } else {
+          datePrices[date] = price;
+        }
+      });
+
+    $(".flex.flex-col.w-full.border.border-gray-200.rounded-lg").each(
+      (_, card) => {
+        const flightNumber = $(card)
+          .find(".font-roboto.flex.flex-col.basis-3 p")
+          .first()
+          .text()
+          .trim();
+
+        // Departure details with airport code
+        const departureEl = $(card).find(".flex.basis-1.flex-col.pb-1").first();
+        const departureFull = departureEl
+          .find(".text-sm.font-normal")
+          .text()
+          .split("(");
+        const departureLocation = departureFull[0].trim();
+        const departureAirport = departureFull[1]?.replace(")", "").trim();
+
+        // Arrival details with airport code
+        const arrivalEl = $(card).find(".flex.basis-1.flex-col.items-end.pb-1");
+        const arrivalFull = arrivalEl
+          .find(".text-sm.font-normal")
+          .text()
+          .split("(");
+        const arrivalLocation = arrivalFull[0].trim();
+        const arrivalAirport = arrivalFull[1]?.replace(")", "").trim();
+
+        // Flight duration
+        const duration = $(card).find("p:contains('hour')").text().trim();
+
+        // Base price - handle multiple price elements correctly
+        const priceText = $(card)
+          .find("button.bg-primary.text-white")
+          .first()
+          .text()
+          .trim();
+        const basePrice = priceText.match(/₦[\d,]+/)?.[0] || "";
+
+        // Flight info and status
+        const flightInfo = {
+          status: "",
+          statusUrl: "",
+        };
+
+        const statusLink = $(card).find("a[href*='flightradar24.com']");
+        if (statusLink.length) {
+          flightInfo.statusUrl = statusLink.attr("href") || "";
+          flightInfo.status = "Scheduled";
+        }
+
+        flights.push({
+          flightNumber,
+          departure: {
+            time: departureEl
+              .find(".text-primary.text-2xl.font-semibold")
+              .text()
+              .trim(),
+            period: departureEl
+              .find(".text-sm.font-semibold")
+              .last()
+              .text()
+              .trim(),
+            location: departureLocation,
+            airport: departureAirport,
+          },
+          arrival: {
+            time: arrivalEl
+              .find(".text-primary.text-2xl.font-semibold")
+              .text()
+              .trim(),
+            period: arrivalEl
+              .find(".text-sm.font-semibold")
+              .last()
+              .text()
+              .trim(),
+            location: arrivalLocation,
+            airport: arrivalAirport,
+          },
+          duration,
+          basePrice,
+          flightInfo,
+          selectedDate: selectedDate.date
+            ? {
+                date: selectedDate.date,
+                price: selectedDate.price,
+              }
+            : undefined,
+          otherDates: Object.entries(datePrices).map(([date, price]) => ({
+            date,
+            price,
+          })),
+        });
+      }
+    );
+
+    return flights;
   }
 }

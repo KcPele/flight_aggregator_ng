@@ -7,12 +7,13 @@ export default function Home() {
         new URLSearchParams({
           origin: "LOS",
           destination: "ABV",
-          departure: "2025-01-13",
+          departure: "2025-01-20",
           adult: "1",
           child: "0",
           infant: "0",
         })
     );
+
     const data = await response.json();
     console.log(data);
   };

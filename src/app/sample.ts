@@ -48,3 +48,15 @@
 //         infant: "0",
 //       })
 //   );
+
+// const response = await fetch(
+//     "/api/flights/valuejet?" +
+//       new URLSearchParams({
+//         origin: "LOS",
+//         destination: "ABV",
+//         departure: "2025-01-16",
+//         adult: "1",
+//         child: "0",
+//         infant: "0",
+//       })
+//   );

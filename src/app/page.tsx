@@ -3,7 +3,7 @@
 export default function Home() {
   const handleTest = async () => {
     const response = await fetch(
-      "/api/flights/greenafrica?" +
+      "/api/flights/valuejet?" +
         new URLSearchParams({
           origin: "LOS",
           destination: "ABV",

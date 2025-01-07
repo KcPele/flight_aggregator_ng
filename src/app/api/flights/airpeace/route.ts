@@ -30,7 +30,11 @@ export async function GET(request: Request) {
     const airPeaceService = new AirPeaceService();
     const flights = await airPeaceService.searchFlights(params);
 
-    return NextResponse.json({ flights });
+    return NextResponse.json({
+      flights,
+      provider: "airpeace",
+      searchParams: params,
+    });
   } catch (error) {
     console.error("Error in Air Peace API route:", error);
     return NextResponse.json(

@@ -36,3 +36,15 @@
 //         infants: "0",
 //       })
 //   );
+
+// const response = await fetch(
+//     "/api/flights/greenafrica?" +
+//       new URLSearchParams({
+//         origin: "LOS",
+//         destination: "ABV",
+//         departure: "2025-01-13",
+//         adult: "1",
+//         child: "0",
+//         infant: "0",
+//       })
+//   );

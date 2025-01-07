@@ -1,19 +1,15 @@
 // lib/services/arikair.ts
 import { load } from "cheerio";
 import { format } from "date-fns";
-import {
-  ArikAirSearchParams,
-  ArikAirFlightData,
-  ArikAirPassengers,
-} from "@/types/arikair";
+import { ArikAirSearchParams, ArikAirFlightData } from "@/types/arikair";
 
 export class ArikAirService {
   private readonly BASE_URL = "https://arikair.crane.aero";
   private readonly SESSION_URL = `${this.BASE_URL}/ibe/home`;
   private readonly SEARCH_URL = `${this.BASE_URL}/ibe/availability/create`;
 
-  private async initializeSession(): Promise<{
-    cookies: string;
+  private async getCookiesAndTokens(): Promise<{
+    cookies: string[];
     sid: string;
     cid: string;
   }> {
@@ -22,118 +18,100 @@ export class ArikAirService {
         method: "GET",
         headers: {
           Accept:
-            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
           "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         },
+        cache: "no-store",
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to initialize session");
-      }
+      if (!response.ok) throw new Error("Failed to get session");
 
-      const cookies = response.headers.get("set-cookie") || "";
       const html = await response.text();
       const $ = load(html);
 
-      // Extract session and client IDs from the page
-      const sid = $('input[name="_sid"]').val() as string;
-      const cid = $('input[name="_cid"]').val() as string;
+      const cookies = response.headers.getSetCookie() || [];
+      const sid = $('input[name="_sid"]').val() || "";
+      const cid = $('input[name="_cid"]').val() || "";
 
-      if (!sid || !cid) {
-        throw new Error("Failed to extract session or client ID");
-      }
+      if (!sid || !cid) throw new Error("Failed to extract session tokens");
 
       return { cookies, sid, cid };
     } catch (error) {
-      console.error("Error initializing session:", error);
+      console.error("Session initialization failed:", error);
       throw error;
     }
   }
 
-  private formatDate(date: Date): string {
-    return format(date, "dd MMM yyyy");
+  private buildSearchParams(
+    params: ArikAirSearchParams & { _sid: string; _cid: string }
+  ): string {
+    const searchParams = new URLSearchParams();
+
+    searchParams.append("_sid", params._sid);
+    searchParams.append("_cid", params._cid);
+    searchParams.append("tripType", params.tripType);
+    searchParams.append("inlineRadioOptions", "on");
+    searchParams.append("flightRequestList[0].depPort", params.depPort);
+    searchParams.append("flightRequestList[0].arrPort", params.arrPort);
+    searchParams.append(
+      "flightRequestList[0].date",
+      format(params.date, "dd MMM yyyy")
+    );
+    searchParams.append("passengerQuantities[0].passengerType", "ADLT");
+    searchParams.append(
+      "passengerQuantities[0].quantity",
+      params.passengers.adult.toString()
+    );
+    searchParams.append("passengerQuantities[1].passengerType", "CHLD");
+    searchParams.append(
+      "passengerQuantities[1].quantity",
+      params.passengers.child.toString()
+    );
+    searchParams.append("passengerQuantities[2].passengerType", "INFT");
+    searchParams.append(
+      "passengerQuantities[2].quantity",
+      params.passengers.infant.toString()
+    );
+
+    return searchParams.toString();
   }
 
-  private buildSearchUrl(params: ArikAirSearchParams): string {
-    // Start with base parameters
-    const baseParams = new URLSearchParams({
-      _sid: params._sid!,
-      _cid: params._cid!,
-      tripType: params.tripType,
-      inlineRadioOptions: "on",
-      depPort: params.depPort,
-      arrPort: params.arrPort,
-      date: params.date,
-    });
-
-    // Add passenger parameters
-    baseParams.append("passengerType", "ADLT");
-    baseParams.append("quantity", params.passengers.adult.toString());
-    baseParams.append("passengerType", "CHLD");
-    baseParams.append("quantity", params.passengers.child.toString());
-    baseParams.append("passengerType", "INFT");
-    baseParams.append("quantity", params.passengers.infant.toString());
-
-    return `${this.SEARCH_URL}?${baseParams.toString()}`;
-  }
-
-  private parseHTML(html: string): ArikAirFlightData {
+  private parseFlights(html: string): ArikAirFlightData {
     const $ = load(html);
     const flights: ArikAirFlightData = [];
 
     $(".js-journey").each((_, element) => {
-      const departureTime = $(element)
-        .find(".left-info-block .time")
-        .first()
-        .text()
-        .trim();
-      const arrivalTime = $(element)
-        .find(".right-info-block .time")
-        .first()
-        .text()
-        .trim();
-      const departurePort = $(element)
-        .find(".left-info-block .port")
-        .text()
-        .trim();
-      const arrivalPort = $(element)
-        .find(".right-info-block .port")
-        .text()
-        .trim();
-      const flightNumber = $(element)
-        .find(".middle-block .flight-no")
-        .text()
-        .trim();
-      const flightDuration = $(element)
-        .find(".middle-block .flight-duration")
-        .text()
-        .trim();
+      const flight = {
+        departureTime: $(element)
+          .find(".left-info-block .time")
+          .first()
+          .text()
+          .trim(),
+        arrivalTime: $(element)
+          .find(".right-info-block .time")
+          .first()
+          .text()
+          .trim(),
+        departurePort: $(element).find(".left-info-block .port").text().trim(),
+        arrivalPort: $(element).find(".right-info-block .port").text().trim(),
+        flightNumber: $(element).find(".middle-block .flight-no").text().trim(),
+        flightDuration: $(element)
+          .find(".middle-block .flight-duration")
+          .text()
+          .trim(),
+        price: $(element)
+          .find(".price-best-offer, .price")
+          .first()
+          .text()
+          .replace("₦", "")
+          .replace(/,/g, "")
+          .trim(),
+        seatsRemaining: $(element).find(".remain-seat .count").text().trim(),
+      };
 
-      const price = $(element)
-        .find(".price-best-offer, .price")
-        .first()
-        .text()
-        .replace("₦", "")
-        .replace(/,/g, "")
-        .trim();
-
-      const seatsRemaining = $(element)
-        .find(".remain-seat .count")
-        .text()
-        .trim();
-
-      if (departureTime && arrivalTime) {
-        flights.push({
-          departureTime,
-          arrivalTime,
-          departurePort,
-          arrivalPort,
-          flightNumber,
-          flightDuration,
-          price,
-          seatsRemaining,
-        });
+      if (flight.departureTime && flight.arrivalTime) {
+        flights.push(flight);
       }
     });
 
@@ -141,49 +119,34 @@ export class ArikAirService {
   }
 
   async searchFlights(
-    params: Omit<ArikAirSearchParams, "_sid" | "_cid"> & { date: Date }
+    params: Omit<ArikAirSearchParams, "_sid" | "_cid">
   ): Promise<ArikAirFlightData> {
     try {
-      // Initialize session first
-      const { cookies, sid, cid } = await this.initializeSession();
-
-      // Prepare search parameters with valid session
-      const formattedParams: ArikAirSearchParams = {
+      const { cookies, sid, cid } = await this.getCookiesAndTokens();
+      const searchParams = this.buildSearchParams({
         ...params,
-        date: this.formatDate(params.date),
         _sid: sid,
         _cid: cid,
-        inlineRadioOptions: "on",
-        passengers: {
-          adult: params.passengers.adult || 1,
-          child: params.passengers.child || 0,
-          infant: params.passengers.infant || 0,
-        },
-      };
-
-      // Make the search request with session cookies
-      const searchUrl = this.buildSearchUrl(formattedParams);
-      console.log("Search URL:", searchUrl);
-
-      const response = await fetch(searchUrl, {
-        headers: {
-          Accept:
-            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-          "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-          Cookie: cookies,
-          Referer: this.SESSION_URL,
-        },
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      const response = await fetch(`${this.SEARCH_URL}?${searchParams}`, {
+        headers: {
+          Accept:
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+          Cookie: cookies.join("; "),
+          Referer: this.SESSION_URL,
+        },
+        cache: "no-store",
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch flights");
 
       const html = await response.text();
-      return this.parseHTML(html);
+      return this.parseFlights(html);
     } catch (error) {
-      console.error("Error fetching Arik Air flights:", error);
+      console.error("Flight search failed:", error);
       throw error;
     }
   }

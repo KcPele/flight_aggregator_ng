@@ -2,26 +2,28 @@
 import { NextResponse } from "next/server";
 import { ArikAirService } from "@/lib/services/arikair";
 
+export const runtime = "edge";
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
 
-    const tripType = searchParams.get("tripType") as "ONE_WAY" | "ROUND_TRIP";
+    const tripType = searchParams.get("tripType");
     const depPort = searchParams.get("depPort");
     const arrPort = searchParams.get("arrPort");
-    const dateStr = searchParams.get("date"); // Expects ISO date string
+    const dateStr = searchParams.get("date");
 
-    // Parse passenger counts
-    const adult = parseInt(searchParams.get("adult") || "1");
-    const child = parseInt(searchParams.get("child") || "0");
-    const infant = parseInt(searchParams.get("infant") || "0");
-
-    // Validate required parameters
+    // Early validation
     if (!tripType || !depPort || !arrPort || !dateStr) {
       return NextResponse.json(
         { error: "Missing required parameters" },
         { status: 400 }
       );
+    }
+
+    // Type guard for tripType
+    if (tripType !== "ONE_WAY" && tripType !== "ROUND_TRIP") {
+      return NextResponse.json({ error: "Invalid trip type" }, { status: 400 });
     }
 
     const date = new Date(dateStr);
@@ -32,31 +34,28 @@ export async function GET(request: Request) {
       );
     }
 
-    const arikAirService = new ArikAirService();
-    const flights = await arikAirService.searchFlights({
+    const service = new ArikAirService();
+    const flights = await service.searchFlights({
       tripType,
       depPort,
       arrPort,
-      date,
+      date: date.toISOString(),
       inlineRadioOptions: "on",
-      passengers: { adult, child, infant },
-    });
-
-    return NextResponse.json({
-      provider: "Arik Air",
-      flights,
-      searchParams: {
-        tripType,
-        depPort,
-        arrPort,
-        date: dateStr,
-        passengers: { adult, child, infant },
+      passengers: {
+        adult: parseInt(searchParams.get("adult") || "1"),
+        child: parseInt(searchParams.get("child") || "0"),
+        infant: parseInt(searchParams.get("infant") || "0"),
       },
     });
+
+    return NextResponse.json({ flights });
   } catch (error) {
-    console.error("Error in Arik Air API route:", error);
+    console.error("API Error:", error);
     return NextResponse.json(
-      { error: "Failed to fetch flight data" },
+      {
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      },
       { status: 500 }
     );
   }

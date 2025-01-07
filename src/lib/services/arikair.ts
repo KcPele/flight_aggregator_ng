@@ -46,7 +46,7 @@ export class ArikAirService {
 
       if (!sid || !cid) throw new Error("Failed to extract session tokens");
 
-      return { cookies, sid, cid };
+      return { cookies, sid: sid as string, cid: cid as string };
     } catch (error) {
       console.error("Session initialization failed:", error);
       throw error;

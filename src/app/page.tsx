@@ -3,11 +3,12 @@
 export default function Home() {
   const handleTest = async () => {
     const response = await fetch(
-      "/api/flights/valuejet?" +
+      "/api/flights/arikair?" +
         new URLSearchParams({
-          origin: "LOS",
-          destination: "ABV",
-          departure: "2025-01-20",
+          tripType: "ONE_WAY",
+          depPort: "LOS",
+          arrPort: "ABV",
+          date: "2025-01-20", // ISO date string
           adult: "1",
           child: "0",
           infant: "0",

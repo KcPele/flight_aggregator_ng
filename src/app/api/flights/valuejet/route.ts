@@ -2,6 +2,8 @@
 import { NextResponse } from "next/server";
 import { ValueJetService } from "@/lib/services/valuejet";
 
+export const maxDuration = 30; // Or whatever timeout you want
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);

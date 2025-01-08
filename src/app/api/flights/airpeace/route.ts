@@ -5,6 +5,7 @@ import { AirPeaceSearchParams } from "@/types/airpeace";
 import { parse, format } from "date-fns";
 import { DATE_FORMAT } from "@/lib/config";
 
+export const runtime = "edge";
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);

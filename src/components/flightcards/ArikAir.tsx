@@ -9,7 +9,7 @@ const FlightCard = ({ flight }: { flight: ArikAirFlight }) => (
     className="bg-gradient-to-br from-red-50 to-white rounded-xl shadow-lg overflow-hidden"
   >
     <div className="h-2 bg-gradient-to-r from-red-500 to-red-600" />
-    <div className="p-6">
+    <div className="p-3 sm:p-6">
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-3">
           <motion.div
@@ -86,7 +86,7 @@ const FlightCard = ({ flight }: { flight: ArikAirFlight }) => (
 );
 
 const ArikAir: React.FC<{ data: ArikAirResponse }> = ({ data }) => (
-  <div className="max-w-4xl mx-auto p-6 space-y-6">
+  <div className="max-w-4xl mx-auto p-3 sm:p-6 space-y-6">
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}

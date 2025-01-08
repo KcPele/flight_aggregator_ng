@@ -2,6 +2,8 @@
 import { NextResponse } from "next/server";
 import { IbomAirService } from "@/lib/services/ibomair";
 
+export const maxDuration = 30; // Or whatever timeout you want
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);

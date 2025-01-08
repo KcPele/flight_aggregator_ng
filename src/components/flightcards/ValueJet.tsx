@@ -11,7 +11,7 @@ const FlightCard = ({ flight }: { flight: ValueJetFlight }) => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-lg shadow-lg p-6 mb-4"
+      className="bg-white rounded-lg shadow-lg p-3 sm:p-6 mb-4"
     >
       <div className="flex justify-between items-center mb-6">
         <div>
@@ -56,18 +56,11 @@ const FlightCard = ({ flight }: { flight: ValueJetFlight }) => {
               animate={{ width: "100%" }}
               className="h-[2px] bg-blue-500"
             />
-            <motion.div
-              animate={{
-                x: [0, 20, 0],
-                rotate: [0, -10, 0],
-              }}
-              transition={{
-                repeat: Infinity,
-                duration: 2,
-              }}
-              className="absolute"
-            >
-              <Plane className="text-blue-500 transform -rotate-90" size={24} />
+            <motion.div className="absolute">
+              <Plane
+                className="text-blue-500 transform rotate-[140deg] "
+                size={24}
+              />
             </motion.div>
           </div>
         </div>
@@ -86,17 +79,17 @@ const FlightCard = ({ flight }: { flight: ValueJetFlight }) => {
         </div>
       </div>
 
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="bg-blue-500 text-white px-6 py-2 rounded-full font-medium"
+          className="bg-blue-500   text-white px-6 py-2 rounded-full font-medium"
         >
           Book for {flight.basePrice}
         </motion.button>
 
         {flight.otherDates && flight.otherDates.length > 0 && (
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {flight.otherDates.map((date, index) => (
               <motion.div
                 key={index}

@@ -12,7 +12,7 @@ const FlightCard = ({ flight }: { flight: IbomAirFlight }) => {
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
-      className="bg-gradient-to-r from-blue-900 to-indigo-900 rounded-2xl p-6 mb-6 text-white overflow-hidden relative"
+      className="bg-gradient-to-r from-blue-900 to-indigo-900 rounded-2xl p-3 sm:p-6 mb-6 text-white overflow-hidden relative"
     >
       <motion.div
         className="absolute top-0 right-0 w-64 h-64 bg-blue-500 rounded-full opacity-10"
@@ -70,18 +70,11 @@ const FlightCard = ({ flight }: { flight: IbomAirFlight }) => {
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
           >
-            <motion.div
-              className="absolute top-1/2 transform -translate-y-1/2"
-              animate={{
-                x: ["0%", "100%"],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-            >
-              <Plane className="text-blue-300 transform -rotate-90" size={16} />
+            <motion.div className="absolute top-1/2 transform -translate-y-1/2">
+              <Plane
+                className="text-blue-300 transform rotate-[40deg]"
+                size={16}
+              />
             </motion.div>
           </motion.div>
         </div>
@@ -97,7 +90,7 @@ const FlightCard = ({ flight }: { flight: IbomAirFlight }) => {
         </motion.div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid sm:grid-cols-3 gap-4">
         {flight.fares.map((fare, index) => (
           <motion.button
             key={index}
@@ -119,7 +112,7 @@ const FlightCard = ({ flight }: { flight: IbomAirFlight }) => {
 
 const IbomAir: React.FC<Props> = ({ data }) => {
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto p-3 sm:p-6">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

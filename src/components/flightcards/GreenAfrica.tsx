@@ -30,7 +30,7 @@ const FlightCard = ({ flight }: { flight: GreenAfricaFlight }) => {
       variants={cardVariants}
       initial="hidden"
       animate="visible"
-      className="bg-gradient-to-br from-green-50 to-white rounded-xl shadow-lg p-6 mb-6 border border-green-100"
+      className="bg-gradient-to-br from-green-50 to-white rounded-xl shadow-lg p-3 sm:p-6 mb-6 border border-green-100"
     >
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
@@ -59,7 +59,7 @@ const FlightCard = ({ flight }: { flight: GreenAfricaFlight }) => {
         </div>
       </div>
 
-      <div className="flex items-center justify-between mb-8">
+      <div className="grid sm:grid-cols-3 justify-center  items-center sm:justify-between mb-8">
         <motion.div
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
@@ -126,7 +126,7 @@ const FlightCard = ({ flight }: { flight: GreenAfricaFlight }) => {
 
 const GreenAfrica: React.FC<Props> = ({ data }) => {
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="max-w-5xl mx-auto p-3 sm:p-6">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

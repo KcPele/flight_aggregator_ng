@@ -98,13 +98,13 @@ export class OverlandService {
         flightType: "overland",
       });
 
-      console.log(response);
+      // console.log(response);
       return {
         flightsData: await this.scrapeFlightDetails(response),
         url,
       };
     } catch (error) {
-      console.error("Error fetching Overland Airways flights:", error);
+      // console.error("Error fetching Overland Airways flights:", error);
       throw error;
     }
   }

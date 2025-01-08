@@ -124,8 +124,10 @@ const ValueJet: React.FC<Props> = ({ data }) => {
         animate={{ opacity: 1 }}
         className="mb-6"
       >
-        <h2 className="text-2xl font-bold mb-2">ValueJet Flights</h2>
-        <p className="text-gray-600">
+        <h2 className="text-2xl font-bold mb-2 text-gray-300">
+          ValueJet Flights
+        </h2>
+        <p className="text-gray-100">
           {data.searchParams.dep} to {data.searchParams.arr}
         </p>
       </motion.div>

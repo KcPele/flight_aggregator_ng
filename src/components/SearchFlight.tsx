@@ -54,6 +54,10 @@ export function SearchFlight() {
       setError("Please fill in all fields");
       return;
     }
+    if (searchParams.arrPort === searchParams.depPort) {
+      setError("Departure and Arrival ports cannot be the same");
+      return;
+    }
     setError(null);
     refetchAll();
   };
@@ -69,7 +73,8 @@ export function SearchFlight() {
   const renderFlightCards = () => {
     return results.map((result, index) => {
       if (result === undefined) return;
-      switch (result.provider) {
+      if (result.flights && !result.flights.length) return;
+      switch (result?.provider) {
         case "airpeace":
           return <AirPeace key={index} data={result as AirPeaceResponse} />;
         case "arikair":

@@ -8,7 +8,7 @@ interface AirPeaceProps {
 
 const AirPeace: React.FC<AirPeaceProps> = ({ data }) => {
   return (
-    <div className="bg-gray-100 p-6">
+    <div className=" p-6">
       <h1 className="text-3xl font-bold text-center text-blue-600 mb-6">
         Air Peace Flight Results
       </h1>
@@ -51,7 +51,7 @@ const AirPeace: React.FC<AirPeaceProps> = ({ data }) => {
               {flight.fares.map((fare, fareIndex) => (
                 <motion.div
                   key={fareIndex}
-                  className="flex justify-between items-center bg-gray-50 p-2 rounded-md mb-2 hover:bg-blue-100 transition"
+                  className="flex justify-between relative items-center bg-gray-50 p-2 rounded-md mb-2 hover:bg-blue-100 transition"
                   whileHover={{ scale: 1.03 }}
                 >
                   <span className="text-sm text-gray-700">{fare.fareType}</span>
@@ -59,7 +59,7 @@ const AirPeace: React.FC<AirPeaceProps> = ({ data }) => {
                     {fare.price}
                   </span>
                   {fare.bestOffer && (
-                    <span className="text-xs text-yellow-500 font-medium">
+                    <span className="text-xs absolute -top-1 text-yellow-500 font-medium">
                       Best Offer
                     </span>
                   )}

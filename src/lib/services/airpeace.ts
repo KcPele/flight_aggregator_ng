@@ -1,5 +1,9 @@
 // lib/services/airpeace.ts
-import { AirPeaceFlightData, AirPeaceSearchParams } from "@/types/airpeace";
+import {
+  AirPeaceFare,
+  AirPeaceFlightData,
+  AirPeaceSearchParams,
+} from "@/types/airpeace";
 import { load } from "cheerio";
 
 export class AirPeaceService {
@@ -62,7 +66,7 @@ export class AirPeaceService {
         .trim();
       const stops = $(element).find(".middle-block .total-stop").text().trim();
 
-      const fares: any[] = [];
+      const fares: AirPeaceFare[] = [];
       $(element)
         .find(".fare-container .fare-item")
         .each((_, fareElement) => {

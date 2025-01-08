@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { ValueJetResponse, ValueJetFlight } from "@/types/valuejet";
-import { Clock, Plane, Calendar, ArrowRight } from "lucide-react";
+import { Plane } from "lucide-react";
 
 interface Props {
   data: ValueJetResponse;

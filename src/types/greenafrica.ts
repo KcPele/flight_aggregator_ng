@@ -1,3 +1,4 @@
+//@ts-ignore i am making use of any type
 export type greenAfricaDataType = {
   success: boolean;
   data: {
@@ -72,6 +73,7 @@ export type greenAfricaDataType = {
               fareid: number;
               type: string;
               notification: string;
+
               breakdown: any[];
               totalfare: number;
               product: string;
@@ -80,6 +82,7 @@ export type greenAfricaDataType = {
               ExtraAmount: number;
             };
           };
+
           rules: any[];
           departureTerminal: string;
           arrivalTerminal: string;

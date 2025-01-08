@@ -1,4 +1,4 @@
-// lib/services/greenafrica.ts
+//@ts-ignore i did not make use of _
 import {
   greenAfricaDataType,
   GreenAfricaSearchParams,
@@ -60,7 +60,6 @@ export class GreenAfricaService {
               !min || curr.totalfare < min.totalfare ? curr : min,
             Object.values(journey.classes || {})[0]
           );
-
           return {
             departureTime: journey.STD || "",
             arrivalTime: journey.STA || "",
@@ -70,12 +69,14 @@ export class GreenAfricaService {
             duration: "", // Calculate from STD and STA if needed
             price: lowestClass?.totalfare.toString() || "N/A",
             fareTypes: Object.entries(journey.classes || {}).map(
-              ([_, classData]) => ({
+              ([, classData]) => ({
                 name: classData.type,
                 price: classData.totalfare.toString(),
                 benefits: Object.entries(classData.services || {})
-                  .filter(([_, service]) => service.active)
-                  .map(([_, service]) => service.text),
+
+                  .filter(([, service]) => service.active)
+
+                  .map(([, service]) => service.text),
               })
             ),
           };

@@ -14,7 +14,7 @@ export default function Home() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <PlaneLanding className="w-12 h-12 text-slate-300" />
             <h1 className="text-4xl md:text-5xl font-bold text-slate-100">
-              SkySearch
+              CheapSearch
             </h1>
             <Plane className="w-12 h-12 text-slate-300" />
           </div>
@@ -31,7 +31,7 @@ export default function Home() {
 
         {/* Footer */}
         <footer className="mt-12 text-center text-slate-500">
-          <p>© 2024 SkySearch. All rights reserved.</p>
+          <p>© 2024 CheapSearch. This was built for the sake of learning.</p>
         </footer>
       </div>
     </main>

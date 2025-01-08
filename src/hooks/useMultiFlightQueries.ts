@@ -11,8 +11,7 @@ export const useMultiFlightQueries = <T>(searchParams: SearchParams) => {
           config.endpoint + "?" + new URLSearchParams(searchParams as any)
         );
         if (!response.ok) {
-          let res = await response.json();
-          console.log(res);
+          const res = await response.json();
           throw new Error(JSON.stringify(res));
         }
         return response.json();

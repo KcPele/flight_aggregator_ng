@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { GreenAfricaResponse, GreenAfricaFlight } from "@/types/greenafrica";
-import { Leaf, Clock, Users, Check } from "lucide-react";
+import { Leaf, Clock, Check } from "lucide-react";
 
 interface Props {
   data: GreenAfricaResponse;

@@ -1,5 +1,4 @@
 import { SearchParams } from "@/types/airport";
-import { format } from "date-fns";
 
 export const DATE_FORMAT = {
   STANDARD: "yyyy-MM-dd",

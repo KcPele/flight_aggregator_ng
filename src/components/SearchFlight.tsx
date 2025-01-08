@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
@@ -62,7 +62,7 @@ export function SearchFlight() {
     console.log(errors);
   }
 
-  const updateSearchParam = (key: keyof SearchParams, value: any) => {
+  const updateSearchParam = (key: keyof SearchParams, value: string) => {
     setSearchParams((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -132,7 +132,7 @@ export function SearchFlight() {
                 onSelect={(value) =>
                   updateSearchParam(
                     "date",
-                    value ? format(value, DATE_FORMAT.STANDARD) : null
+                    format(value as Date, DATE_FORMAT.STANDARD)
                   )
                 }
                 initialFocus

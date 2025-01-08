@@ -9,12 +9,13 @@ export async function GET(request: Request) {
     const params = {
       origin: searchParams.get("origin") || "LOS",
       destination: searchParams.get("destination") || "ABV",
-      departure: new Date(searchParams.get("departure") || ""),
+      departure: new Date(searchParams.get("date") || ""),
       adults: parseInt(searchParams.get("adult") || "1"),
       children: parseInt(searchParams.get("child") || "0"),
       infants: parseInt(searchParams.get("infant") || "0"),
     };
 
+    console.log("SearchParams:", searchParams.get("date"));
     if (!params.origin || !params.destination || !params.departure) {
       return NextResponse.json(
         { error: "Invalid parameters" },
@@ -31,11 +32,12 @@ export async function GET(request: Request) {
       searchParams: params,
     });
   } catch (error) {
-    console.error("API Error:", error);
+    // console.error("API Error:", error);
     return NextResponse.json(
       {
         error:
           error instanceof Error ? error.message : "Unknown error occurred",
+        provider: "greenafrica",
       },
       { status: 500 }
     );

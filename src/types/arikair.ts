@@ -29,3 +29,10 @@ export interface ArikAirSearchParams {
 }
 
 export type ArikAirFlightData = ArikAirFlight[];
+
+export interface ArikAirResponse {
+  flights: ArikAirFlightData;
+  url: string;
+  provider: string;
+  searchParams: URLSearchParams;
+}

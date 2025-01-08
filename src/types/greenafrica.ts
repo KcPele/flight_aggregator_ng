@@ -114,3 +114,9 @@ export interface GreenAfricaSearchParams {
   children: number;
   infants: number;
 }
+
+export interface GreenAfricaResponse {
+  provider: string;
+  flights: GreenAfricaFlight[];
+  searchParams: GreenAfricaSearchParams;
+}

@@ -25,7 +25,7 @@ export interface OverlandFlightDetails {
 }
 
 export interface OverlandSearchParams {
-  type: "OW" | "RT"; // One-way or Round-trip
+  tripType: "OW" | "RT"; // One-way or Round-trip
   fromDst: string; // Departure airport code
   toDst: string; // Arrival airport code
   adults: number;
@@ -74,4 +74,21 @@ export interface CalendarMonth {
 export interface CalendarResponse {
   hasResults: boolean;
   calendar: CalendarMonth[];
+}
+
+export interface OverlandResponse {
+  provider: string;
+  flights: OverlandFlightDetails[];
+  url: string;
+  searchParams: {
+    type: "OW" | "RT";
+    fromDst: string;
+    toDst: string;
+    date: string;
+    passengers: {
+      adults: number;
+      children: number;
+      infants: number;
+    };
+  };
 }

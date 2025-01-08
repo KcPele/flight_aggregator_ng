@@ -7,7 +7,7 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
 
-    const type = searchParams.get("type") as "OW" | "RT";
+    const tripType = searchParams.get("tripType") as "OW" | "RT";
     const fromDst = searchParams.get("fromDst");
     const toDst = searchParams.get("toDst");
     const date = searchParams.get("date");
@@ -16,7 +16,7 @@ export async function GET(request: Request) {
     const infants = parseInt(searchParams.get("infants") || "0");
 
     // Validate required parameters
-    if (!type || !fromDst || !toDst || !date) {
+    if (!tripType || !fromDst || !toDst || !date) {
       return NextResponse.json(
         { error: "Missing required parameters" },
         { status: 400 }
@@ -33,15 +33,16 @@ export async function GET(request: Request) {
 
     const overlandService = new OverlandService();
     const flights = await overlandService.searchFlights(
-      { type, fromDst, toDst, adults, children, infants },
+      { tripType, fromDst, toDst, adults, children, infants },
       date
     );
 
     return NextResponse.json({
       provider: "Overland Airways",
-      flights,
+      flights: flights.flightsData,
+      url: flights.url,
       searchParams: {
-        type,
+        tripType,
         fromDst,
         toDst,
         date,
@@ -51,7 +52,11 @@ export async function GET(request: Request) {
   } catch (error) {
     console.error("Error in Overland Airways API route:", error);
     return NextResponse.json(
-      { error: "Failed to fetch flight data" },
+      {
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+        provider: "overland",
+      },
       { status: 500 }
     );
   }

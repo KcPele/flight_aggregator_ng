@@ -2,6 +2,8 @@
 import { NextResponse } from "next/server";
 import { AirPeaceService } from "@/lib/services/airpeace";
 import { AirPeaceSearchParams } from "@/types/airpeace";
+import { parse, format } from "date-fns";
+import { DATE_FORMAT } from "@/lib/config";
 
 export async function GET(request: Request) {
   try {
@@ -12,7 +14,10 @@ export async function GET(request: Request) {
         (searchParams.get("tripType") as "ONE_WAY" | "ROUND_TRIP") || "ONE_WAY",
       depPort: searchParams.get("depPort") || "",
       arrPort: searchParams.get("arrPort") || "",
-      departureDate: searchParams.get("departureDate") || "",
+      departureDate: format(
+        parse(searchParams.get("date") || "", DATE_FORMAT.STANDARD, new Date()),
+        DATE_FORMAT.AIRPEACE
+      ),
       adult: Number(searchParams.get("adult")) || 1,
       child: Number(searchParams.get("child")) || 0,
       infant: Number(searchParams.get("infant")) || 0,
@@ -31,14 +36,19 @@ export async function GET(request: Request) {
     const flights = await airPeaceService.searchFlights(params);
 
     return NextResponse.json({
-      flights,
+      flights: flights.flightsData,
+      url: flights.url,
       provider: "airpeace",
       searchParams: params,
     });
   } catch (error) {
-    console.error("Error in Air Peace API route:", error);
+    // console.error("Error in Air Peace API route:", error);
     return NextResponse.json(
-      { error: "Failed to fetch flight data" },
+      {
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+        provider: "airpeace",
+      },
       { status: 500 }
     );
   }

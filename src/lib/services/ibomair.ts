@@ -180,7 +180,7 @@ export class IbomAirService {
       const html = await response.text();
       return this.parseHTML(html);
     } catch (error) {
-      console.error("Error fetching Ibom Air flights:", error);
+      // console.error("Error fetching Ibom Air flights:", error);
       throw error;
     }
   }

@@ -89,14 +89,20 @@ export class OverlandService {
   async searchFlights(
     params: OverlandSearchParams,
     date: string
-  ): Promise<OverlandFlightDetails[]> {
+  ): Promise<{ flightsData: OverlandFlightDetails[]; url: string }> {
     try {
       const url = this.buildSearchUrl(params, date);
       console.log(url);
-      const response = await scrapper(url);
+      const response = await scrapper({
+        url,
+        flightType: "overland",
+      });
 
       console.log(response);
-      return this.scrapeFlightDetails(response);
+      return {
+        flightsData: await this.scrapeFlightDetails(response),
+        url,
+      };
     } catch (error) {
       console.error("Error fetching Overland Airways flights:", error);
       throw error;

@@ -33,3 +33,10 @@ export interface AirPeaceSearchParams {
 }
 
 export type AirPeaceFlightData = AirPeaceFlight[];
+
+export interface AirPeaceResponse {
+  flights: AirPeaceFlightData;
+  url: string;
+  provider: string;
+  searchParams: AirPeaceSearchParams;
+}

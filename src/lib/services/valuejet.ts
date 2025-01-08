@@ -2,6 +2,7 @@
 import { format } from "date-fns";
 import { load } from "cheerio";
 import { scrapper } from "../helper";
+import { ValueJetFlight, ValueJetSearchParams } from "@/types/valuejet";
 
 export class ValueJetService {
   private readonly BASE_URL = "https://flyvaluejet.com/flight-result";
@@ -22,7 +23,7 @@ export class ValueJetService {
 
       return this.parseFlights(html);
     } catch (error) {
-      console.error("ValueJet API Error:", error);
+      // console.error("ValueJet API Error:", error);
       throw error;
     }
   }

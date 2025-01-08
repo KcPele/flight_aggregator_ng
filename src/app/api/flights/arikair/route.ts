@@ -48,13 +48,19 @@ export async function GET(request: Request) {
       },
     });
 
-    return NextResponse.json({ flights, provider: "arikair", searchParams });
+    return NextResponse.json({
+      flights: flights.flightsData,
+      url: flights.url,
+      provider: "arikair",
+      searchParams,
+    });
   } catch (error) {
-    console.error("API Error:", error);
+    // console.error("API Error:", error);
     return NextResponse.json(
       {
         error:
           error instanceof Error ? error.message : "Unknown error occurred",
+        provider: "arikair",
       },
       { status: 500 }
     );

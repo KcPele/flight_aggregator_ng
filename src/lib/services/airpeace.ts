@@ -105,7 +105,7 @@ export class AirPeaceService {
 
   async searchFlights(
     params: AirPeaceSearchParams
-  ): Promise<AirPeaceFlightData> {
+  ): Promise<{ flightsData: AirPeaceFlightData; url: string }> {
     try {
       const url = this.buildUrl(params);
       const response = await fetch(url);
@@ -115,9 +115,9 @@ export class AirPeaceService {
       }
 
       const html = await response.text();
-      return this.parseHTML(html);
+      return { flightsData: this.parseHTML(html), url: response.url };
     } catch (error) {
-      console.error("Error fetching Air Peace flights:", error);
+      // console.error("Error fetching Air Peace flights:", error);
       throw error;
     }
   }

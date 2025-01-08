@@ -38,3 +38,20 @@ export interface IbomAirSearchParams {
 }
 
 export type IbomAirFlightData = IbomAirFlight[];
+
+export interface IbomAirResponse {
+  provider: string;
+  flights: IbomAirFlightData;
+  searchParams: {
+    tripType: "ONE_WAY" | "ROUND_TRIP";
+    depPort: string;
+    arrPort: string;
+    date: string;
+    passengers: {
+      adult: number;
+      child: number;
+      infant: number;
+    };
+    accountCode: string | null;
+  };
+}

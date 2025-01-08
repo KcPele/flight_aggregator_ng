@@ -82,7 +82,7 @@ export class GreenAfricaService {
         })
         .filter((flight): flight is GreenAfricaFlight => flight !== null);
     } catch (error) {
-      console.error("Green Africa API Error:", error);
+      // console.error("Green Africa API Error:", error);
       throw error;
     }
   }

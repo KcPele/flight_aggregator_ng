@@ -130,7 +130,7 @@ export class ArikAirService {
 
   async searchFlights(
     params: Omit<ArikAirSearchParams, "_sid" | "_cid">
-  ): Promise<ArikAirFlightData> {
+  ): Promise<{ flightsData: ArikAirFlightData; url: string }> {
     try {
       const { cookies, sid, cid } = await this.getCookiesAndTokens();
       const searchParams = this.buildSearchParams({
@@ -154,7 +154,7 @@ export class ArikAirService {
       if (!response.ok) throw new Error("Failed to fetch flights");
 
       const html = await response.text();
-      return this.parseFlights(html);
+      return { flightsData: this.parseFlights(html), url: response.url };
     } catch (error) {
       console.error("Flight search failed:", error);
       throw error;

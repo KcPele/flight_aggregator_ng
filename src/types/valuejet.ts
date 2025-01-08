@@ -1,4 +1,5 @@
-interface ValueJetSearchParams {
+export interface ValueJetSearchParams {
+  tripType: string;
   dep: string;
   arr: string;
   departure: Date;
@@ -7,12 +8,12 @@ interface ValueJetSearchParams {
   infants: number;
 }
 
-interface FlightFare {
+export interface FlightFare {
   type: string;
   price: string;
 }
 
-interface ValueJetFlight {
+export interface ValueJetFlight {
   flightNumber: string;
   departure: {
     time: string;
@@ -40,4 +41,10 @@ interface ValueJetFlight {
     date: string;
     price: string;
   }>;
+}
+
+export interface ValueJetResponse {
+  provider: string;
+  flights: ValueJetFlight[];
+  searchParams: ValueJetSearchParams;
 }

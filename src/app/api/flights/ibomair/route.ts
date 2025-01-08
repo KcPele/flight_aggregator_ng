@@ -56,9 +56,13 @@ export async function GET(request: Request) {
       },
     });
   } catch (error) {
-    console.error("Error in Ibom Air API route:", error);
+    // console.error("Error in Ibom Air API route:", error);
     return NextResponse.json(
-      { error: "Failed to fetch flight data" },
+      {
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+        provider: "ibomair",
+      },
       { status: 500 }
     );
   }

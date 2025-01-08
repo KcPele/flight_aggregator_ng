@@ -34,5 +34,13 @@ export interface ArikAirResponse {
   flights: ArikAirFlightData;
   url: string;
   provider: string;
-  searchParams: URLSearchParams;
+  searchParams: {
+    tripType: string;
+    depPort: string;
+    arrPort: string;
+    date: string;
+    adult: string;
+    child: string;
+    infant: string;
+  };
 }

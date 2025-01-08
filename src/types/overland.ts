@@ -8,22 +8,6 @@ export interface OverlandFlightClassInfo {
   baggageAllowance: string;
   fareRules: string;
 }
-
-export interface OverlandFlightDetails {
-  departureTime: string;
-  arrivalTime: string;
-  departureDate: string;
-  arrivalDate: string;
-  departureAirport: string;
-  arrivalAirport: string;
-  flightNumber: string;
-  operatingAirline: string;
-  duration: string;
-  stops: string[];
-  via: string[];
-  fareClasses: OverlandFlightClassInfo[];
-}
-
 export interface OverlandSearchParams {
   tripType: "OW" | "RT"; // One-way or Round-trip
   fromDst: string; // Departure airport code
@@ -49,11 +33,6 @@ export interface OverlandCalendarMonth {
   days: OverlandCalendarDay[];
 }
 
-export interface OverlandFlightData {
-  hasResults: boolean;
-  flights: OverlandFlightDetails[];
-}
-
 //temporal
 export interface CalendarDay {
   daynumber: string;
@@ -74,6 +53,26 @@ export interface CalendarMonth {
 export interface CalendarResponse {
   hasResults: boolean;
   calendar: CalendarMonth[];
+}
+
+export interface OverlandFlightDetails {
+  departureTime: string;
+  arrivalTime: string;
+  departureDate: string;
+  arrivalDate: string;
+  departureAirport: string;
+  arrivalAirport: string;
+  flightNumber: string;
+  operatingAirline: string;
+  duration: string;
+  stops: string[];
+  via: string[];
+  fareClasses: OverlandFlightClassInfo[];
+}
+
+export interface OverlandFlightData {
+  hasResults: boolean;
+  flights: OverlandFlightDetails[];
 }
 
 export interface OverlandResponse {

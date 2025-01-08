@@ -12,7 +12,9 @@ export async function GET(request: Request) {
     const depPort = searchParams.get("depPort");
     const arrPort = searchParams.get("arrPort");
     const dateStr = searchParams.get("date");
-
+    const adult = searchParams.get("adult") || "1";
+    const child = searchParams.get("child") || "0";
+    const infant = searchParams.get("infant") || "0";
     // Early validation
     if (!tripType || !depPort || !arrPort || !dateStr) {
       return NextResponse.json(
@@ -42,9 +44,9 @@ export async function GET(request: Request) {
       date: date.toISOString(),
       inlineRadioOptions: "on",
       passengers: {
-        adult: parseInt(searchParams.get("adult") || "1"),
-        child: parseInt(searchParams.get("child") || "0"),
-        infant: parseInt(searchParams.get("infant") || "0"),
+        adult: parseInt(adult),
+        child: parseInt(child),
+        infant: parseInt(infant),
       },
     });
 
@@ -52,7 +54,15 @@ export async function GET(request: Request) {
       provider: "arikair",
       flights: flights.flightsData,
       url: flights.url,
-      searchParams,
+      searchParams: {
+        tripType,
+        depPort,
+        arrPort,
+        date: dateStr,
+        adult,
+        child,
+        infant,
+      },
     });
   } catch (error) {
     // console.error("API Error:", error);

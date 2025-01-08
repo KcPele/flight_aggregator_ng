@@ -13,7 +13,20 @@ import { AirportSelector } from "@/components/AirportSelector";
 import { AirlineResponses, SearchParams } from "@/types/airport";
 import { useMultiFlightQueries } from "@/hooks/useMultiFlightQueries";
 import { DATE_FORMAT } from "@/lib/config";
-
+import AirPeace from "./flightcards/AirPeace";
+import ArikAir from "./flightcards/ArikAir";
+import Overland from "./flightcards/Overland";
+import ValueJet from "./flightcards/ValueJet";
+import GreenAfrica from "./flightcards/GreenAfrica";
+import IbomAir from "./flightcards/IbomAir";
+import { GreenAfricaResponse } from "@/types/greenafrica";
+import { ValueJetResponse } from "@/types/valuejet";
+import { OverlandResponse } from "@/types/overland";
+import { ArikAirResponse } from "@/types/arikair";
+import { IbomAirResponse } from "@/types/ibomair";
+import { AirPeaceResponse } from "@/types/airpeace";
+import { CalendarIcon, Plane } from "lucide-react";
+import { Loader2 } from "lucide-react";
 export function SearchFlight() {
   const [searchParams, setSearchParams] = useState<SearchParams>({
     date: null,
@@ -45,12 +58,6 @@ export function SearchFlight() {
     refetchAll();
   };
 
-  useEffect(() => {
-    if (results.length > 0) {
-      console.log(results);
-    }
-  }, [results]);
-
   if (errorState) {
     console.log(errors);
   }
@@ -59,11 +66,35 @@ export function SearchFlight() {
     setSearchParams((prev) => ({ ...prev, [key]: value }));
   };
 
+  const renderFlightCards = () => {
+    return results.map((result, index) => {
+      if (result === undefined) return;
+      switch (result.provider) {
+        case "airpeace":
+          return <AirPeace key={index} data={result as AirPeaceResponse} />;
+        case "arikair":
+          return <ArikAir key={index} data={result as ArikAirResponse} />;
+        case "overland":
+          return <Overland key={index} data={result as OverlandResponse} />;
+        case "valuejet":
+          return <ValueJet key={index} data={result as ValueJetResponse} />;
+        case "greenafrica":
+          return (
+            <GreenAfrica key={index} data={result as GreenAfricaResponse} />
+          );
+        case "ibomair":
+          return <IbomAir key={index} data={result as IbomAirResponse} />;
+        default:
+          return null;
+      }
+    });
+  };
+
   return (
-    <div className="max-w-4xl mx-auto p-4 space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="space-y-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="space-y-2">
-          <Label>From</Label>
+          <Label className="text-slate-300">From</Label>
           <AirportSelector
             value={searchParams.depPort}
             onChange={(value) => updateSearchParam("depPort", value)}
@@ -72,7 +103,7 @@ export function SearchFlight() {
         </div>
 
         <div className="space-y-2">
-          <Label>To</Label>
+          <Label className="text-slate-300">To</Label>
           <AirportSelector
             value={searchParams.arrPort}
             onChange={(value) => updateSearchParam("arrPort", value)}
@@ -81,10 +112,14 @@ export function SearchFlight() {
         </div>
 
         <div className="space-y-2">
-          <Label>Date</Label>
+          <Label className="text-slate-300">Date</Label>
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" className="w-full justify-start">
+              <Button
+                variant="outline"
+                className="w-full justify-start bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700"
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
                 {searchParams.date
                   ? format(searchParams.date, "PPP")
                   : "Select date"}
@@ -97,7 +132,7 @@ export function SearchFlight() {
                 onSelect={(value) =>
                   updateSearchParam(
                     "date",
-                    format(value || "", DATE_FORMAT.STANDARD)
+                    value ? format(value, DATE_FORMAT.STANDARD) : null
                   )
                 }
                 initialFocus
@@ -107,12 +142,31 @@ export function SearchFlight() {
         </div>
       </div>
 
-      <Button onClick={handleSearch} className="w-full">
-        Search Flights
+      <Button
+        onClick={handleSearch}
+        className="w-full bg-slate-700 hover:bg-slate-600 text-slate-100"
+        disabled={isLoading}
+      >
+        {isLoading ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Searching...
+          </>
+        ) : (
+          <>
+            <Plane className="mr-2 h-4 w-4" />
+            Search Flights
+          </>
+        )}
       </Button>
 
-      {error && <p className="text-red-500">{error}</p>}
-      {isLoading && <p>Loading...</p>}
+      {error && (
+        <div className="p-4 bg-red-900/20 border border-red-900/20 rounded-lg text-red-400 text-center">
+          {error}
+        </div>
+      )}
+
+      <div className="space-y-6">{renderFlightCards()}</div>
     </div>
   );
 }

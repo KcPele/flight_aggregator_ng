@@ -41,6 +41,7 @@ export type IbomAirFlightData = IbomAirFlight[];
 
 export interface IbomAirResponse {
   provider: string;
+  url: string;
   flights: IbomAirFlightData;
   searchParams: {
     tripType: "ONE_WAY" | "ROUND_TRIP";

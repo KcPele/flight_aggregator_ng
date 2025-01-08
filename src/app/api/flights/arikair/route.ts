@@ -49,9 +49,9 @@ export async function GET(request: Request) {
     });
 
     return NextResponse.json({
+      provider: "arikair",
       flights: flights.flightsData,
       url: flights.url,
-      provider: "arikair",
       searchParams,
     });
   } catch (error) {

@@ -18,7 +18,7 @@ export async function GET(request: Request) {
     console.log("SearchParams:", searchParams.get("date"));
     if (!params.origin || !params.destination || !params.departure) {
       return NextResponse.json(
-        { error: "Invalid parameters" },
+        { error: "Invalid parameters", provider: "greenafrica" },
         { status: 400 }
       );
     }
@@ -27,8 +27,9 @@ export async function GET(request: Request) {
     const flights = await service.searchFlights(params);
 
     return NextResponse.json({
-      provider: "Green Africa",
+      provider: "greenafrica",
       flights,
+      url: "",
       searchParams: params,
     });
   } catch (error) {

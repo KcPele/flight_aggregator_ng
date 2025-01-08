@@ -1,6 +1,7 @@
 // app/api/flights/valuejet/route.ts
 import { NextResponse } from "next/server";
 import { ValueJetService } from "@/lib/services/valuejet";
+import { url } from "inspector";
 
 export async function GET(request: Request) {
   try {
@@ -18,7 +19,7 @@ export async function GET(request: Request) {
 
     if (!params.dep || !params.arr || isNaN(params.departure.getTime())) {
       return NextResponse.json(
-        { error: "Invalid parameters" },
+        { error: "Invalid parameters", provider: "valuejet" },
         { status: 400 }
       );
     }
@@ -27,7 +28,8 @@ export async function GET(request: Request) {
     const flights = await service.searchFlights(params);
 
     return NextResponse.json({
-      provider: "ValueJet",
+      provider: "valuejet",
+      url: "",
       flights,
       searchParams: params,
     });

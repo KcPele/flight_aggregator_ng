@@ -119,4 +119,5 @@ export interface GreenAfricaResponse {
   provider: string;
   flights: GreenAfricaFlight[];
   searchParams: GreenAfricaSearchParams;
+  url: string;
 }

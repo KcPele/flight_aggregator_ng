@@ -20,7 +20,7 @@ export async function GET(request: Request) {
     // Validate required parameters
     if (!tripType || !depPort || !arrPort || !dateStr) {
       return NextResponse.json(
-        { error: "Missing required parameters" },
+        { error: "Missing required parameters", provider: "ibomair" },
         { status: 400 }
       );
     }
@@ -28,7 +28,7 @@ export async function GET(request: Request) {
     const date = new Date(dateStr);
     if (isNaN(date.getTime())) {
       return NextResponse.json(
-        { error: "Invalid date format" },
+        { error: "Invalid date format", provider: "ibomair" },
         { status: 400 }
       );
     }
@@ -44,8 +44,9 @@ export async function GET(request: Request) {
     });
 
     return NextResponse.json({
-      provider: "Ibom Air",
+      provider: "ibomair",
       flights,
+      url: "",
       searchParams: {
         tripType,
         depPort,

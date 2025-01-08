@@ -27,7 +27,7 @@ export async function GET(request: Request) {
     // Validate required parameters
     if (!params.depPort || !params.arrPort || !params.departureDate) {
       return NextResponse.json(
-        { error: "Missing required parameters" },
+        { error: "Missing required parameters", provider: "arikair" },
         { status: 400 }
       );
     }
@@ -36,9 +36,9 @@ export async function GET(request: Request) {
     const flights = await airPeaceService.searchFlights(params);
 
     return NextResponse.json({
+      provider: "airpeace",
       flights: flights.flightsData,
       url: flights.url,
-      provider: "airpeace",
       searchParams: params,
     });
   } catch (error) {

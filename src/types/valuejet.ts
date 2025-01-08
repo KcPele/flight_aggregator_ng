@@ -45,6 +45,7 @@ export interface ValueJetFlight {
 
 export interface ValueJetResponse {
   provider: string;
+  url: string;
   flights: ValueJetFlight[];
   searchParams: ValueJetSearchParams;
 }

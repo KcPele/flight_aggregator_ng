@@ -12,7 +12,8 @@ export const useMultiFlightQueries = <T>(searchParams: SearchParams) => {
         );
         if (!response.ok) {
           let res = await response.json();
-          throw new Error(res);
+          console.log(res);
+          throw new Error(JSON.stringify(res));
         }
         return response.json();
       },
@@ -23,7 +24,7 @@ export const useMultiFlightQueries = <T>(searchParams: SearchParams) => {
 
   return {
     results: queries.map((q) => q.data as T),
-    errors: queries.map((q) => q.error),
+    errors: queries.map((q) => JSON.parse(q.error?.message || "{}")),
     error: queries.some((q) => q.error),
     isLoading: queries.some((q) => q.isFetching),
     refetchAll: () => queries.forEach((q) => q.refetch()),

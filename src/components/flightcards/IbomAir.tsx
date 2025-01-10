@@ -99,9 +99,8 @@ const FlightCard = ({
 
       <div className="grid sm:grid-cols-3 gap-4">
         {flight.fares.map((fare, index) => (
-          <Link href={url}>
+          <Link key={index} href={url}>
             <motion.button
-              key={index}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}

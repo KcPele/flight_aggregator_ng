@@ -53,7 +53,7 @@ export class GreenAfricaService {
           url: res.url,
         };
       }
-      let flightsData = data.data.flights.flight
+      const flightsData = data.data.flights.flight
         .map((flight) => {
           const journey = flight.journey?.[0];
           if (!journey) return null;

@@ -7,15 +7,13 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
 
     const params = {
-      origin: searchParams.get("origin") || "LOS",
-      destination: searchParams.get("destination") || "ABV",
-      departure: new Date(searchParams.get("date") || ""),
-      adults: parseInt(searchParams.get("adult") || "1"),
-      children: parseInt(searchParams.get("child") || "0"),
-      infants: parseInt(searchParams.get("infant") || "0"),
+      origin: searchParams.get("depPort"),
+      destination: searchParams.get("arrPort"),
+      departure: new Date(searchParams.get("date")),
+      adults: parseInt(searchParams.get("adult")),
+      children: parseInt(searchParams.get("child")),
+      infants: parseInt(searchParams.get("infant")),
     };
-
-    console.log("SearchParams:", searchParams.get("date"));
     if (!params.origin || !params.destination || !params.departure) {
       return NextResponse.json(
         { error: "Invalid parameters", provider: "greenafrica" },
@@ -28,8 +26,8 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       provider: "greenafrica",
-      flights,
-      url: "",
+      flights: flights.flightsData,
+      url: flights.url,
       searchParams: params,
     });
   } catch (error) {

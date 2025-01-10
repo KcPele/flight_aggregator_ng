@@ -97,18 +97,21 @@ export class IbomAirService {
         .trim();
 
       const flightNumber = $(element)
-        .find(".middle-block .flight-no")
+        .find(".col-12.middle-block .flight-no")
         .text()
         .trim();
       const flightDuration = $(element)
-        .find(".middle-block .flight-duration")
+        .find(".col-12.middle-block .flight-duration")
         .text()
         .trim();
-      const stops = $(element).find(".middle-block .total-stop").text().trim();
+      const stops = $(element)
+        .find(".col-12.middle-block .total-stop")
+        .text()
+        .trim();
 
       const fares: IbomAirFare[] = [];
       $(element)
-        .find(".fare-container .price-text-single-line.price")
+        .find(".fare-container .currency-left-side")
         .each((_, fareElement) => {
           const price = $(fareElement)
             .text()
@@ -116,8 +119,8 @@ export class IbomAirService {
             .replace(/,/g, "")
             .trim();
           const fareType = $(fareElement)
-            .closest(".fare-item")
-            .find(".mobile-cabin-info")
+            .closest(".cabin-class-container")
+            .find(".cabin-header")
             .text()
             .trim();
           fares.push({ fareType, price });
@@ -148,7 +151,10 @@ export class IbomAirService {
 
   async searchFlights(
     params: Omit<IbomAirSearchParams, "_sid" | "_cid" | "date"> & { date: Date }
-  ): Promise<IbomAirFlightData> {
+  ): Promise<{
+    flightsData: IbomAirFlightData;
+    url: string;
+  }> {
     try {
       // First initialize the session
       const { cookies, sid, cid } = await this.initializeSession();
@@ -178,7 +184,10 @@ export class IbomAirService {
       }
 
       const html = await response.text();
-      return this.parseHTML(html);
+      return {
+        flightsData: this.parseHTML(html),
+        url: searchUrl,
+      };
     } catch (error) {
       // console.error("Error fetching Ibom Air flights:", error);
       throw error;

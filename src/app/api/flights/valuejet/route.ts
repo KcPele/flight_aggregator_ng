@@ -9,13 +9,13 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
 
     const params = {
-      tripType: searchParams.get("tripType") || "OW",
-      dep: searchParams.get("origin") || "LOS",
-      arr: searchParams.get("destination") || "ABV",
-      departure: new Date(searchParams.get("date") || ""),
-      adults: parseInt(searchParams.get("adult") || "1"),
-      children: parseInt(searchParams.get("child") || "0"),
-      infants: parseInt(searchParams.get("infant") || "0"),
+      tripType: searchParams.get("tripType"),
+      dep: searchParams.get("depPort"),
+      arr: searchParams.get("arrPort"),
+      departure: new Date(searchParams.get("date")),
+      adults: parseInt(searchParams.get("adult")),
+      children: parseInt(searchParams.get("child")),
+      infants: parseInt(searchParams.get("infant")),
     };
 
     if (!params.dep || !params.arr || isNaN(params.departure.getTime())) {
@@ -30,8 +30,8 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       provider: "valuejet",
-      url: "",
-      flights,
+      url: flights.url,
+      flights: flights.flightsData,
       searchParams: params,
     });
   } catch (error) {

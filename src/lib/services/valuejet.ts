@@ -13,15 +13,22 @@ export class ValueJetService {
       "yyyy-MM-dd"
     )},till:,p.a:${params.adults},p.c:${params.children},p.i:${params.infants}`;
   }
-  async searchFlights(params: ValueJetSearchParams): Promise<ValueJetFlight[]> {
+  async searchFlights(params: ValueJetSearchParams): Promise<{
+    flightsData: ValueJetFlight[];
+    url: string;
+  }> {
     try {
       const requestInfo = this.buildRequestInfo(params);
+      const url = `${this.BASE_URL}?requestInfo=${requestInfo}`;
       const html = await scrapper({
-        url: `${this.BASE_URL}?requestInfo=${requestInfo}`,
+        url,
         flightType: "valuejet",
       });
 
-      return this.parseFlights(html);
+      return {
+        flightsData: this.parseFlights(html),
+        url,
+      };
     } catch (error) {
       // console.error("ValueJet API Error:", error);
       throw error;

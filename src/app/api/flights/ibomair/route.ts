@@ -47,8 +47,8 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       provider: "ibomair",
-      flights,
-      url: "",
+      flights: flights.flightsData,
+      url: flights.url,
       searchParams: {
         tripType,
         depPort,

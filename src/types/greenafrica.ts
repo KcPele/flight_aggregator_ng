@@ -105,6 +105,7 @@ export interface GreenAfricaFlight {
   fareTypes: {
     name: string;
     price: string;
+    freeseats: number;
     benefits: string[];
   }[];
 }

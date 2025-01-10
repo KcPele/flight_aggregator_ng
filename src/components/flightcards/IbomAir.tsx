@@ -1,12 +1,19 @@
 import { motion } from "framer-motion";
 import { IbomAirResponse, IbomAirFlight } from "@/types/ibomair";
 import { Plane, Clock, Map } from "lucide-react";
+import Link from "next/link";
 
 interface Props {
   data: IbomAirResponse;
 }
 
-const FlightCard = ({ flight }: { flight: IbomAirFlight }) => {
+const FlightCard = ({
+  flight,
+  url,
+}: {
+  flight: IbomAirFlight;
+  url: string;
+}) => {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -26,7 +33,7 @@ const FlightCard = ({ flight }: { flight: IbomAirFlight }) => {
         }}
       />
 
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col xs:flex-row justify-between items-center mb-8">
         <motion.div
           initial={{ x: -20 }}
           animate={{ x: 0 }}
@@ -92,18 +99,20 @@ const FlightCard = ({ flight }: { flight: IbomAirFlight }) => {
 
       <div className="grid sm:grid-cols-3 gap-4">
         {flight.fares.map((fare, index) => (
-          <motion.button
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-gradient-to-r from-blue-500 to-indigo-500 p-4 rounded-xl"
-          >
-            <p className="text-sm text-blue-200 mb-1">{fare.fareType}</p>
-            <p className="text-xl font-bold">{fare.price}</p>
-          </motion.button>
+          <Link href={url}>
+            <motion.button
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-gradient-to-r from-blue-500 to-indigo-500 p-4 rounded-xl"
+            >
+              <p className="text-sm text-blue-200 mb-1">{fare.fareType}</p>
+              <p className="text-xl font-bold">{fare.price}</p>
+            </motion.button>
+          </Link>
         ))}
       </div>
     </motion.div>
@@ -131,7 +140,10 @@ const IbomAir: React.FC<Props> = ({ data }) => {
           animate={{ opacity: 1 }}
           transition={{ delay: index * 0.2 }}
         >
-          <FlightCard flight={flight} />
+          <FlightCard
+            flight={flight}
+            url={data.url || "https://www.ibomair.com/"}
+          />
         </motion.div>
       ))}
     </div>

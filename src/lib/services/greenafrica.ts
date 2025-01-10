@@ -11,21 +11,21 @@ const API_BASE_URL = "https://middleware.greenafrica.com/api";
 export class GreenAfricaService {
   private async getDeepLink(
     params: GreenAfricaSearchParams
-  ): Promise<greenAfricaDataType> {
-    const url = `${API_BASE_URL}/booking/getDeepLink`;
+  ): Promise<{ flightData: greenAfricaDataType; url: string }> {
     const searchParams = new URLSearchParams({
       from: params.origin,
       to: params.destination,
       start: format(params.departure, "yyyy/MM/dd"),
       adults: params.adults.toString(),
       child: params.children.toString(),
+      session_id: Math.random().toString(36).substring(9),
       infant: params.infants.toString(),
       currency: "NGN",
       cabinCode: "ECO",
-      session_id: Math.random().toString(36).substring(7),
     });
 
-    const response = await fetch(`${url}?${searchParams.toString()}`, {
+    const url = `${API_BASE_URL}/booking/getDeepLink?${searchParams.toString()}`;
+    const response = await fetch(`${url}`, {
       headers: {
         Accept: "application/json",
         "User-Agent":
@@ -37,20 +37,23 @@ export class GreenAfricaService {
       throw new Error("Failed to fetch flight data");
     }
 
-    return response.json();
+    return { flightData: await response.json(), url };
   }
 
-  async searchFlights(
-    params: GreenAfricaSearchParams
-  ): Promise<GreenAfricaFlight[]> {
+  async searchFlights(params: GreenAfricaSearchParams): Promise<{
+    flightsData: GreenAfricaFlight[];
+    url: string;
+  }> {
     try {
-      const data = await this.getDeepLink(params);
-
+      const res = await this.getDeepLink(params);
+      const data = res.flightData;
       if (!data.data.flights.flight?.length) {
-        return [];
+        return {
+          flightsData: [],
+          url: res.url,
+        };
       }
-
-      return data.data.flights.flight
+      let flightsData = data.data.flights.flight
         .map((flight) => {
           const journey = flight.journey?.[0];
           if (!journey) return null;
@@ -72,6 +75,7 @@ export class GreenAfricaService {
               ([, classData]) => ({
                 name: classData.type,
                 price: classData.totalfare.toString(),
+                freeseats: classData.freeseats,
                 benefits: Object.entries(classData.services || {})
 
                   .filter(([, service]) => service.active)
@@ -82,6 +86,7 @@ export class GreenAfricaService {
           };
         })
         .filter((flight): flight is GreenAfricaFlight => flight !== null);
+      return { flightsData, url: res.url };
     } catch (error) {
       // console.error("Green Africa API Error:", error);
       throw error;

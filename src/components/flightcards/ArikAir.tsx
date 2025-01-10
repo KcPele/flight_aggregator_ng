@@ -10,7 +10,7 @@ const FlightCard = ({ flight }: { flight: ArikAirFlight }) => (
   >
     <div className="h-2 bg-gradient-to-r from-red-500 to-red-600" />
     <div className="p-3 sm:p-6">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col xs:flex-row justify-between xs:items-center mb-6">
         <div className="flex items-center gap-3">
           <motion.div
             animate={{ rotate: [0, 360] }}
@@ -29,7 +29,7 @@ const FlightCard = ({ flight }: { flight: ArikAirFlight }) => (
         </div>
         <motion.div
           whileHover={{ scale: 1.05 }}
-          className="text-right bg-red-100 px-4 py-2 rounded-full"
+          className="text-right flex items-center gap-2 bg-red-100 px-4 py-2 rounded-full"
         >
           <p className="text-red-600 text-sm">Seats Left</p>
           <p className="font-bold text-red-700">{flight.seatsRemaining}</p>

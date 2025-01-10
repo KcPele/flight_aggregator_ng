@@ -56,11 +56,8 @@ const FlightCard = ({ flight }: { flight: ValueJetFlight }) => {
               animate={{ width: "100%" }}
               className="h-[2px] bg-blue-500"
             />
-            <motion.div className="absolute">
-              <Plane
-                className="text-blue-500 transform rotate-[140deg] "
-                size={24}
-              />
+            <motion.div className="absolute hidden sm:block">
+              <Plane className="text-blue-500 transform  " size={24} />
             </motion.div>
           </div>
         </div>
@@ -79,7 +76,7 @@ const FlightCard = ({ flight }: { flight: ValueJetFlight }) => {
         </div>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-center justify-between">
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}

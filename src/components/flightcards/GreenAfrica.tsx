@@ -109,6 +109,9 @@ const FlightCard = ({ flight }: { flight: GreenAfricaFlight }) => {
             <p className="text-xl font-bold text-green-900 mb-3">
               {fare.price}
             </p>
+            <p className="font-medium text-green-800 mb-2">
+              {fare.freeseats} Seats
+            </p>
             <div className="space-y-2">
               {fare.benefits.map((benefit, idx) => (
                 <div key={idx} className="flex items-center gap-2">

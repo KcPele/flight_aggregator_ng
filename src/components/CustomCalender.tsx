@@ -9,7 +9,13 @@ import {
 } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
 
-const CustomCalendar = ({ date, onDateChange }) => {
+const CustomCalendar = ({
+  date,
+  onDateChange,
+}: {
+  date: Date | null;
+  onDateChange: (date: Date | undefined) => void;
+}) => {
   const [open, setOpen] = useState(false);
 
   const handleSelect = (selectedDate: Date | undefined) => {
@@ -39,7 +45,7 @@ const CustomCalendar = ({ date, onDateChange }) => {
       <PopoverContent className="w-auto p-0" align="start">
         <BaseCalendar
           mode="single"
-          selected={date}
+          selected={date || new Date()}
           onSelect={handleSelect}
           initialFocus
           modifiers={modifiers}

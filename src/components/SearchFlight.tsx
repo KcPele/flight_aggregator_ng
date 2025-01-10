@@ -20,7 +20,7 @@ import { OverlandResponse } from "@/types/overland";
 import { ArikAirResponse } from "@/types/arikair";
 import { IbomAirResponse } from "@/types/ibomair";
 import { AirPeaceResponse } from "@/types/airpeace";
-import { CalendarIcon, Plane } from "lucide-react";
+import { Plane } from "lucide-react";
 import { Loader2 } from "lucide-react";
 import CustomCalender from "./CustomCalender";
 export function SearchFlight() {

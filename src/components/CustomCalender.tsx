@@ -7,6 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
 
 const CustomCalendar = ({ date, onDateChange }) => {
   const [open, setOpen] = useState(false);
@@ -29,8 +30,9 @@ const CustomCalendar = ({ date, onDateChange }) => {
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="w-full justify-start bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700"
+          className="w-full justify-start bg-slate-800 border-slate-700 text-slate-200 "
         >
+          <CalendarIcon className="mr-2 h-4 w-4" />
           {date ? format(date, "PPP") : "Pick a date"}
         </Button>
       </PopoverTrigger>

@@ -1,14 +1,9 @@
 "use client";
 import { useState } from "react";
 import { format } from "date-fns";
-import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+
 import { AirportSelector } from "@/components/AirportSelector";
 import { AirlineResponses, SearchParams } from "@/types/airport";
 import { useMultiFlightQueries } from "@/hooks/useMultiFlightQueries";
@@ -128,33 +123,6 @@ export function SearchFlight() {
               )
             }
           />
-          {/* <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className="w-full justify-start bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700"
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {searchParams.date
-                  ? format(searchParams.date, "PPP")
-                  : "Select date"}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-              
-                mode="single"
-                selected={searchParams.date || undefined}
-                onSelect={(value) =>
-                  updateSearchParam(
-                    "date",
-                    format(value as Date, DATE_FORMAT.STANDARD)
-                  )
-                }
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover> */}
         </div>
       </div>
 

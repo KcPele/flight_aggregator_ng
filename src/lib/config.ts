@@ -31,15 +31,15 @@ export const AIRLINES_CONFIG = {
       ...params,
     }),
   },
-  overland: {
-    endpoint: "/api/flights/overland",
+  valuejet: {
+    endpoint: "/api/flights/valuejet",
     formatParams: (params: SearchParams) => ({
       tripType: params.tripType === "ONE_WAY" ? "OW" : "RT",
       ...params,
     }),
   },
-  valuejet: {
-    endpoint: "/api/flights/valuejet",
+  overland: {
+    endpoint: "/api/flights/overland",
     formatParams: (params: SearchParams) => ({
       tripType: params.tripType === "ONE_WAY" ? "OW" : "RT",
       ...params,

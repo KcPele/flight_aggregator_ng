@@ -8,6 +8,16 @@ type FlightType =
   | "airpeace"
   | "overland"
   | "greenafrica";
+
+// Declare chrome property on Window interface
+declare global {
+  interface Window {
+    chrome?: {
+      runtime: Record<string, unknown>;
+    };
+  }
+}
+
 export const scrapper = async ({
   url,
   flightType,
@@ -34,10 +44,29 @@ export const scrapper = async ({
 
   const page = await browser.newPage();
 
-  // Set user agent
+  // Enhanced browser fingerprinting evasion
+  await page.evaluateOnNewDocument(() => {
+    Object.defineProperty(navigator, "webdriver", { get: () => false });
+    Object.defineProperty(navigator, "plugins", { get: () => [1, 2, 3, 4, 5] });
+    Object.defineProperty(navigator, "languages", {
+      get: () => ["en-US", "en"],
+    });
+    (window as any).chrome = { runtime: {} };
+  });
+
+  // Set user agent with more realistic browser fingerprint
   await page.setUserAgent(
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
   );
+
+  // Set additional headers to appear more like a real browser
+  await page.setExtraHTTPHeaders({
+    "Accept-Language": "en-US,en;q=0.9",
+    Accept:
+      "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding": "gzip, deflate, br",
+    Connection: "keep-alive",
+  });
 
   // Add request interception
   await page.setRequestInterception(true);
@@ -49,16 +78,6 @@ export const scrapper = async ({
     }
   });
 
-  // Add additional headers
-  await page.setExtraHTTPHeaders({
-    "Accept-Language": "en-US,en;q=0.9",
-    Accept:
-      "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
-    "sec-ch-ua": '"Not_A Brand";v="8", "Chromium";v="120"',
-    "sec-ch-ua-mobile": "?0",
-    "sec-ch-ua-platform": '"Windows"',
-  });
-
   try {
     // Wait longer for navigation
     await page.goto(url, { waitUntil: "networkidle0", timeout: 30000 });
@@ -68,6 +87,8 @@ export const scrapper = async ({
           ? document.querySelector(
               'div[class="flex flex-wrap list-reset focus:shadow-outline p-2 pt-6 lg:p-8 bg-white shadow-lg rounded-lg"]'
             )
+          : flightType === "overland"
+          ? document.querySelector('div[class="flightList"]')
           : document.body;
       if (!targetDiv) return "";
       targetDiv.querySelectorAll("svg, img").forEach((el) => el.remove());

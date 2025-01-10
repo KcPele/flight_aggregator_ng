@@ -51,7 +51,7 @@ export class OverlandService {
             .trim();
           const priceText = $fare.find(".btn-class").text().trim();
           const available = !$fare.find(".maxBookingClass").length;
-          const rules = $fare.find(".flightChoice_tooltipNote").text().trim();
+          // const rules = $fare.find(".flightChoice_tooltipNote").text().trim();
 
           fareClasses.push({
             flightNumber: flightInfo.find("strong").text().trim(),
@@ -59,9 +59,9 @@ export class OverlandService {
             price: this.parsePrice(priceText),
             available,
             duration: this.parseDuration(duration),
-            baggageAllowance:
-              rules.match(/Baggage Allowance: ([^.]+)/)?.[1] || "",
-            fareRules: rules,
+            baggageAllowance: "",
+            // rules.match(/Baggage Allowance: ([^.]+)/)?.[1] || "",
+            fareRules: "",
           });
         });
 
@@ -92,13 +92,11 @@ export class OverlandService {
   ): Promise<{ flightsData: OverlandFlightDetails[]; url: string }> {
     try {
       const url = this.buildSearchUrl(params, date);
-      console.log(url);
       const response = await scrapper({
         url,
         flightType: "overland",
       });
 
-      // console.log(response);
       return {
         flightsData: await this.scrapeFlightDetails(response),
         url,

@@ -1,7 +1,7 @@
 // app/api/flights/overland/route.ts
 import { NextResponse } from "next/server";
 import { OverlandService } from "@/lib/services/overland";
-// export const maxDuration = 20; // Or whatever timeout you want
+export const maxDuration = 30; // Or whatever timeout you want
 
 export async function GET(request: Request) {
   try {
@@ -38,7 +38,7 @@ export async function GET(request: Request) {
     );
 
     return NextResponse.json({
-      provider: "Overland Airways",
+      provider: "overland",
       flights: flights.flightsData,
       url: flights.url,
       searchParams: {

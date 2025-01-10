@@ -3,7 +3,6 @@ import { useState } from "react";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-
 import { AirportSelector } from "@/components/AirportSelector";
 import { AirlineResponses, SearchParams } from "@/types/airport";
 import { useMultiFlightQueries } from "@/hooks/useMultiFlightQueries";
@@ -20,9 +19,10 @@ import { OverlandResponse } from "@/types/overland";
 import { ArikAirResponse } from "@/types/arikair";
 import { IbomAirResponse } from "@/types/ibomair";
 import { AirPeaceResponse } from "@/types/airpeace";
-import { Plane } from "lucide-react";
-import { Loader2 } from "lucide-react";
+import { Plane, Loader2 } from "lucide-react";
 import CustomCalender from "./CustomCalender";
+import FlightAggregateDisplay from "./FlightAggregateDisplay";
+
 export function SearchFlight() {
   const [searchParams, setSearchParams] = useState<SearchParams>({
     date: null,
@@ -39,11 +39,12 @@ export function SearchFlight() {
     results,
     isLoading,
     refetchAll,
-    errors,
-    error: errorState,
-  } = useMultiFlightQueries<AirlineResponses[keyof AirlineResponses]>(
-    searchParams
-  );
+    // errors,
+    // error: errorState,
+  } =
+    useMultiFlightQueries<AirlineResponses[keyof AirlineResponses]>(
+      searchParams
+    );
 
   const handleSearch = () => {
     if (!searchParams.date || !searchParams.depPort || !searchParams.arrPort) {
@@ -57,10 +58,6 @@ export function SearchFlight() {
     setError(null);
     refetchAll();
   };
-
-  if (errorState) {
-    console.log(errors);
-  }
 
   const updateSearchParam = (key: keyof SearchParams, value: string) => {
     setSearchParams((prev) => ({ ...prev, [key]: value }));
@@ -92,7 +89,7 @@ export function SearchFlight() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-x-4 sm:space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="space-y-2">
           <Label className="text-slate-300">From</Label>
@@ -149,8 +146,9 @@ export function SearchFlight() {
           {error}
         </div>
       )}
+      <FlightAggregateDisplay results={results} />
 
-      <div className="space-y-6">{renderFlightCards()}</div>
+      <div className="">{renderFlightCards()}</div>
     </div>
   );
 }

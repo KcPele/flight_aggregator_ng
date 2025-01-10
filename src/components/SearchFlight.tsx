@@ -89,7 +89,7 @@ export function SearchFlight() {
   };
 
   return (
-    <div className="space-x-4 sm:space-y-8">
+    <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="space-y-2">
           <Label className="text-slate-300">From</Label>

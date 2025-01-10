@@ -25,7 +25,7 @@ export default function Home() {
         </div>
 
         {/* Main search container */}
-        <div className="w-full max-w-4xl bg-slate-800/50 rounded-lg border border-slate-700 p-8">
+        <div className="w-full max-w-4xl bg-slate-800/50 rounded-lg border border-slate-700 p-4 sm:p-8">
           <SearchFlight />
         </div>
 

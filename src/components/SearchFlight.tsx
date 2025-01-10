@@ -27,6 +27,7 @@ import { IbomAirResponse } from "@/types/ibomair";
 import { AirPeaceResponse } from "@/types/airpeace";
 import { CalendarIcon, Plane } from "lucide-react";
 import { Loader2 } from "lucide-react";
+import CustomCalender from "./CustomCalender";
 export function SearchFlight() {
   const [searchParams, setSearchParams] = useState<SearchParams>({
     date: null,
@@ -118,7 +119,16 @@ export function SearchFlight() {
 
         <div className="space-y-2">
           <Label className="text-slate-300">Date</Label>
-          <Popover>
+          <CustomCalender
+            date={searchParams.date}
+            onDateChange={(value) =>
+              updateSearchParam(
+                "date",
+                format(value as Date, DATE_FORMAT.STANDARD)
+              )
+            }
+          />
+          {/* <Popover>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
@@ -132,6 +142,7 @@ export function SearchFlight() {
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
               <Calendar
+              
                 mode="single"
                 selected={searchParams.date || undefined}
                 onSelect={(value) =>
@@ -143,7 +154,7 @@ export function SearchFlight() {
                 initialFocus
               />
             </PopoverContent>
-          </Popover>
+          </Popover> */}
         </div>
       </div>
 

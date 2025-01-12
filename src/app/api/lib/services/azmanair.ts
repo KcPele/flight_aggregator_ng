@@ -6,6 +6,7 @@ import {
   AzmanAirFormData,
   AzmanAirFlightData,
 } from "@/types/azmanair";
+import { extractFlightData } from "../utils";
 export class AzmanService {
   private readonly BASE_URL =
     "https://booking.airazman.com/VARS/Public/WebServices/AvailabilityWS.asmx/GetFlightAvailability";
@@ -64,16 +65,14 @@ export class AzmanService {
       if (!response.ok) return [];
 
       const html = await response.text();
-      return this.parseRecapPage(html);
+      return extractFlightData(html);
     } catch (error) {
       console.error("Failed to fetch recap page:", error);
       return [];
     }
   }
 
-  private parseRecapPage(html: string): AzmanAirFlightData {
-    return [];
-  }
+  
 
   async searchFlights(params: AzmanAirSearchParams): Promise<{
     flightsData: AzmanAirFlightData;

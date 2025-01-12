@@ -4,6 +4,7 @@ interface UnitedNigeriaProps {
   data: UnitedNigeriaResponse;
 }
 const UnitedNigeria = ({ data }: UnitedNigeriaProps) => {
+  console.log(data);
   return <div>UnitedNigeria</div>;
 };
 

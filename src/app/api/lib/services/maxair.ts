@@ -1,7 +1,6 @@
 // lib/services/maxair.ts
 import { format } from "date-fns";
 import { v4 as uuidv4 } from "uuid";
-import * as cheerio from "cheerio";
 import {
   MaxAirSearchParams,
   MaxAirFormData,

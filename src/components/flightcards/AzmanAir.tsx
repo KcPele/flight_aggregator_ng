@@ -4,6 +4,7 @@ interface AzmanAirProps {
   data: AzmanAirResponse;
 }
 const AzmanAir = ({ data }: AzmanAirProps) => {
+  console.log(data);
   return <div>AzmanAir</div>;
 };
 

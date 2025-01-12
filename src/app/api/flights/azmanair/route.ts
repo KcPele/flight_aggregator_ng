@@ -1,8 +1,8 @@
 // app/api/flights/azman/route.ts
 import { NextResponse } from "next/server";
-import { AzmanService } from "@/lib/services/azmanair";
+import { AzmanService } from "../../lib/services/azmanair";
 
-export const runtime = "edge";
+export const maxDuration = 30; // Or whatever timeout you want
 
 export async function GET(request: Request) {
   try {

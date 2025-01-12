@@ -1,8 +1,8 @@
 // app/api/flights/maxair/route.ts
 import { NextResponse } from "next/server";
-import { MaxAirService } from "@/lib/services/maxair";
+import { MaxAirService } from "../../lib/services/maxair";
 
-export const runtime = "edge";
+export const maxDuration = 30; // Or whatever timeout you want
 
 export async function GET(request: Request) {
   try {

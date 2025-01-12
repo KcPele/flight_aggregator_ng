@@ -1,6 +1,6 @@
 // app/api/flights/valuejet/route.ts
 import { NextResponse } from "next/server";
-import { ValueJetService } from "@/lib/services/valuejet";
+import { ValueJetService } from "../../lib/services/valuejet";
 
 export const maxDuration = 30; // Or whatever timeout you want
 

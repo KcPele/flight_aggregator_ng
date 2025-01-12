@@ -1,6 +1,6 @@
 // app/api/flights/ibomair/route.ts
 import { NextResponse } from "next/server";
-import { IbomAirService } from "@/lib/services/ibomair";
+import { IbomAirService } from "../../lib/services/ibomair";
 
 export const maxDuration = 30; // Or whatever timeout you want
 

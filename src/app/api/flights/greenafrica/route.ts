@@ -1,6 +1,6 @@
 // app/api/flights/greenafrica/route.ts
 import { NextResponse } from "next/server";
-import { GreenAfricaService } from "@/lib/services/greenafrica";
+import { GreenAfricaService } from "../../lib/services/greenafrica";
 
 export async function GET(request: Request) {
   try {

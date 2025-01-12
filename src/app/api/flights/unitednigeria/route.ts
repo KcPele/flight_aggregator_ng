@@ -1,8 +1,8 @@
 // app/api/flights/unitednigeria/route.ts
 import { NextResponse } from "next/server";
-import { UnitedNigeriaService } from "@/lib/services/unitednigeria";
+import { UnitedNigeriaService } from "../../lib/services/unitednigeria";
 
-export const runtime = "edge";
+export const maxDuration = 30; // Or whatever timeout you want
 
 export async function GET(request: Request) {
   try {

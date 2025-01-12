@@ -1,7 +1,7 @@
 // lib/services/overland.ts
 import * as cheerio from "cheerio";
 import { OverlandFlightDetails, OverlandSearchParams } from "@/types/overland";
-import { scrapper } from "../helper";
+import { scrapper } from "../../lib/utils";
 
 export class OverlandService {
   private readonly BASE_URL = "https://www.overlandairways.com";

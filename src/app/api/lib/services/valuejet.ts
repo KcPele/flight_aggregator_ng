@@ -1,7 +1,7 @@
 // lib/services/valuejet.ts
 import { format } from "date-fns";
 import { load } from "cheerio";
-import { scrapper } from "../helper";
+import { scrapper } from "../../lib/utils";
 import { ValueJetFlight, ValueJetSearchParams } from "@/types/valuejet";
 
 export class ValueJetService {

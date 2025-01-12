@@ -103,7 +103,7 @@ export class AzmanService {
       }
 
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       if (data?.d?.Result === "OK" && data?.d?.NextURL) {
         const flights = await this.getFlightsFromRecap(data.d.NextURL);
         return {

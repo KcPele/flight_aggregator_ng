@@ -1,6 +1,6 @@
 // app/api/flights/overland/route.ts
 import { NextResponse } from "next/server";
-import { OverlandService } from "@/lib/services/overland";
+import { OverlandService } from "../../lib/services/overland";
 export const maxDuration = 30; // Or whatever timeout you want
 
 export async function GET(request: Request) {

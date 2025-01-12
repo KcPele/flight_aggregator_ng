@@ -1,6 +1,6 @@
 // app/api/flights/arikair/route.ts
 import { NextResponse } from "next/server";
-import { ArikAirService } from "@/lib/services/arikair";
+import { ArikAirService } from "../../lib/services/arikair";
 
 export const runtime = "edge";
 

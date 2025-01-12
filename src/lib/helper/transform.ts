@@ -6,6 +6,7 @@ import { MaxAirResponse } from "@/types/maxair";
 import { OverlandResponse } from "@/types/overland";
 import { UnitedNigeriaResponse } from "@/types/unitednigeria";
 import { ValueJetResponse } from "@/types/valuejet";
+import { formatCurrency } from ".";
 
 export const transformedAirPeaceFlights = (data: AirPeaceResponse) => {
   return data.flights.map((flight) => {
@@ -18,7 +19,7 @@ export const transformedAirPeaceFlights = (data: AirPeaceResponse) => {
       departureTime: `${flight.departure.time} ${flight.departure.date}`,
       arrivalTime: `${flight.arrival.time} ${flight.arrival.date}`,
       type: lowestFare.fareType,
-      price: lowestFare.price,
+      price: formatCurrency(lowestFare.price),
       url: data.url,
       provider: data.provider,
     };
@@ -30,7 +31,7 @@ export const transformedArikAirFlights = (data: ArikAirResponse) => {
     departureTime: flight.departureTime,
     arrivalTime: flight.arrivalTime,
     type: "ECONOMY", // Arik Air typically defaults to economy
-    price: flight.price,
+    price: formatCurrency(flight.price),
     url: data.url,
     provider: data.provider,
   }));
@@ -47,7 +48,7 @@ export const transformedGreenAfricaFlights = (data: GreenAfricaResponse) => {
       departureTime: flight.departureTime,
       arrivalTime: flight.arrivalTime,
       type: lowestFare.name,
-      price: lowestFare.price,
+      price: formatCurrency(lowestFare.price),
       url: data.url,
       provider: data.provider,
     };
@@ -64,7 +65,7 @@ export const transformedIbomAirFlights = (data: IbomAirResponse) => {
       departureTime: `${flight.departure.time} ${flight.departure.date}`,
       arrivalTime: `${flight.arrival.time} ${flight.arrival.date}`,
       type: lowestFare.fareType,
-      price: lowestFare.price,
+      price: formatCurrency(lowestFare.price),
       url: data.url,
       provider: data.provider,
     };
@@ -86,7 +87,7 @@ export const transformedOverlandFlights = (data: OverlandResponse) => {
       departureTime: `${flight.departureTime} ${flight.departureDate}`,
       arrivalTime: `${flight.arrivalTime} ${flight.arrivalDate}`,
       type: lowestFare?.fareClass,
-      price: lowestFare?.price.toString(),
+      price: formatCurrency(lowestFare?.price.toString()),
       url: data.url,
       provider: data.provider,
     };
@@ -102,7 +103,7 @@ export const transformedValueJetFlights = (data: ValueJetResponse) => {
       departureTime,
       arrivalTime,
       type: "STANDARD", // ValueJet typically offers standard fares
-      price: flight.selectedDate?.price || flight.basePrice,
+      price: formatCurrency(flight.selectedDate?.price || flight.basePrice),
       url: data.url,
       provider: data.provider,
     };
@@ -115,7 +116,7 @@ export const transformedMaxAirFlights = (data: MaxAirResponse) => {
       departureTime: `${flight.departureTime} ${flight.departureCity}`,
       arrivalTime: `${flight.arrivalTime} ${flight.arrivalCity}`,
       type: flight.class,
-      price: flight.price,
+      price: formatCurrency(flight.price),
       url: data.url,
       provider: data.provider,
     };
@@ -130,7 +131,7 @@ export const transformedUnitedNigeriaFlights = (
       departureTime: `${flight.departureTime} ${flight.departureCity}`,
       arrivalTime: `${flight.arrivalTime} ${flight.arrivalCity}`,
       type: flight.class,
-      price: flight.price,
+      price: formatCurrency(flight.price),
       url: data.url,
       provider: data.provider,
     };

@@ -1,6 +1,6 @@
 // app/api/flights/airpeace/route.ts
 import { NextResponse } from "next/server";
-import { AirPeaceService } from "@/lib/services/airpeace";
+import { AirPeaceService } from "../../lib/services/airpeace";
 import { AirPeaceSearchParams } from "@/types/airpeace";
 import { parse, format } from "date-fns";
 import { DATE_FORMAT } from "@/lib/config";

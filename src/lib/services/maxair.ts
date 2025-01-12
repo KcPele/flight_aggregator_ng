@@ -8,6 +8,7 @@ import {
   MaxAirFlightData,
   MaxAirFlight,
 } from "@/types/maxair";
+import { extractFlightData } from "../utils";
 
 export class MaxAirService {
   private readonly BASE_URL =
@@ -52,48 +53,6 @@ export class MaxAirService {
     });
   }
 
-  private extractFlightData(html: string): MaxAirFlightData {
-    const $ = cheerio.load(html);
-    const flights: MaxAirFlightData = [];
-
-    // Iterate over each flight panel
-    $(".flt-panel").each((_, panel) => {
-      const flight: MaxAirFlight = {
-        departureTime: $(panel).find(".cal-Depart-time .time").text().trim(),
-        arrivalTime: $(panel).find(".cal-Arrive-time .time").text().trim(),
-        departureCity: $(panel).find(".cal-Depart-time .city").text().trim(),
-        arrivalCity: $(panel).find(".cal-Arrive-time .city").text().trim(),
-        flightDate: $(panel).find(".cal-Depart-time .flightDate").text().trim(),
-        flightNumber: $(panel).find(".flightnumber").text().trim(),
-        flightDuration: $(panel).find(".flightDuration").text().trim(),
-        price: $(panel).find(".fare-price, .fare-price-small").text().trim(),
-        class: "",
-        seatsRemaining: "",
-      };
-
-      // Extract class and seat availability
-      $(panel)
-        .find(".flt-class")
-        .each((_, classPanel) => {
-          const classType = $(classPanel)
-            .find(".class-band-name")
-            .text()
-            .trim();
-          const seats = $(classPanel)
-            .find(".seats-count, .seats-none")
-            .text()
-            .trim();
-          if (classType && seats) {
-            flight.class = classType;
-            flight.seatsRemaining = seats;
-          }
-        });
-
-      flights.push(flight);
-    });
-
-    return flights;
-  }
   private async getFlightsFromRecap(url: string): Promise<MaxAirFlightData> {
     try {
       const response = await fetch(url, {
@@ -109,8 +68,7 @@ export class MaxAirService {
       if (!response.ok) return [];
 
       const html = await response.text();
-      console.log(html);
-      return this.extractFlightData(html);
+      return extractFlightData<MaxAirFlight>(html);
     } catch (error) {
       console.error("Failed to fetch recap page:", error);
       return [];
@@ -146,7 +104,7 @@ export class MaxAirService {
       let flightsData: MaxAirFlightData = [];
       const data = await response.json();
       if (data?.d?.Result === "OK" && data?.d?.Data2) {
-        flightsData = this.extractFlightData(data.d.Data2);
+        flightsData = extractFlightData<MaxAirFlight>(data.d.Data2);
       } else if (data?.d?.Result === "OK" && data?.d?.NextURL) {
         flightsData = await this.getFlightsFromRecap(data.d.NextURL);
       }

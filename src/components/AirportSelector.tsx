@@ -36,7 +36,7 @@ export function AirportSelector({
 
   return (
     <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className="bg-slate-800 border-slate-700 text-slate-200 placeholder:text-slate-500">
+      <SelectTrigger className="bg-slate-800/50 border-slate-700 text-slate-200 placeholder:text-slate-500">
         <SelectValue placeholder={placeholder}>
           {value ? (
             <div className="flex items-center gap-2">

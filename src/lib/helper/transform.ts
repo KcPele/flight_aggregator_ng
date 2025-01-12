@@ -4,6 +4,7 @@ import { GreenAfricaResponse } from "@/types/greenafrica";
 import { IbomAirResponse } from "@/types/ibomair";
 import { MaxAirResponse } from "@/types/maxair";
 import { OverlandResponse } from "@/types/overland";
+import { UnitedNigeriaResponse } from "@/types/unitednigeria";
 import { ValueJetResponse } from "@/types/valuejet";
 
 export const transformedAirPeaceFlights = (data: AirPeaceResponse) => {
@@ -109,6 +110,21 @@ export const transformedValueJetFlights = (data: ValueJetResponse) => {
 };
 
 export const transformedMaxAirFlights = (data: MaxAirResponse) => {
+  return data.flights.map((flight) => {
+    return {
+      departureTime: `${flight.departureTime} ${flight.departureCity}`,
+      arrivalTime: `${flight.arrivalTime} ${flight.arrivalCity}`,
+      type: flight.class,
+      price: flight.price,
+      url: data.url,
+      provider: data.provider,
+    };
+  });
+};
+
+export const transformedUnitedNigeriaFlights = (
+  data: UnitedNigeriaResponse
+) => {
   return data.flights.map((flight) => {
     return {
       departureTime: `${flight.departureTime} ${flight.departureCity}`,

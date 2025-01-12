@@ -40,12 +40,15 @@ export interface UnitedNigeriaFormData {
 }
 
 export interface UnitedNigeriaFlight {
-  flightNumber: string;
   departureTime: string;
   arrivalTime: string;
-  departurePort: string;
-  arrivalPort: string;
+  departureCity: string;
+  arrivalCity: string;
+  flightDate: string;
+  flightNumber: string;
+  flightDuration: string;
   price: string;
+  class: string;
   seatsRemaining?: string;
   duration?: string;
 }

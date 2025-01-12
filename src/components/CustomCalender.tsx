@@ -36,7 +36,7 @@ const CustomCalendar = ({
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="w-full justify-start bg-slate-800 border-slate-700 text-slate-200 "
+          className="w-full justify-start bg-slate-800/50 border-slate-700 text-slate-200"
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
           {date ? format(date, "PPP") : "Pick a date"}

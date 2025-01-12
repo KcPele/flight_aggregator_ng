@@ -8,6 +8,7 @@ import {
   transformedIbomAirFlights,
   transformedMaxAirFlights,
   transformedOverlandFlights,
+  transformedUnitedNigeriaFlights,
   transformedValueJetFlights,
 } from "@/lib/helper/transform";
 import { AirPeaceResponse } from "@/types/airpeace";
@@ -17,7 +18,7 @@ import { IbomAirResponse } from "@/types/ibomair";
 import { OverlandResponse } from "@/types/overland";
 import { ValueJetResponse } from "@/types/valuejet";
 import { MaxAirResponse } from "@/types/maxair";
-
+import { UnitedNigeriaResponse } from "@/types/unitednigeria";
 interface FlightAggregateDisplayProps {
   results: AirlineResponses[keyof AirlineResponses][];
 }
@@ -87,10 +88,10 @@ export default function FlightAggregateDisplay({
           return [...acc, ...transformedFlights];
         }
         case "unitednigeria": {
-          // const transformedFlights = transformedUnitedNigeriaFlights(
-          //   data as UnitedNigeriaResponse
-          // );
-          // return [...acc, ...transformedFlights];
+          const transformedFlights = transformedUnitedNigeriaFlights(
+            data as UnitedNigeriaResponse
+          );
+          return [...acc, ...transformedFlights];
         }
         case "azmanair": {
           // const transformedFlights = transformedAzmanAirFlights(
@@ -117,7 +118,7 @@ export default function FlightAggregateDisplay({
   };
 
   return (
-    <div className="w-full p-4 bg-gray-800">
+    <div className="w-full p-4 bg-slate-800/30 backdrop-blur-sm rounded-xl border border-slate-700/50">
       <h1 className="mb-4 text-center text-2xl font-bold text-white">
         Available Flights
       </h1>

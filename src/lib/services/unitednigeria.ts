@@ -5,7 +5,9 @@ import {
   UnitedNigeriaSearchParams,
   UnitedNigeriaFormData,
   UnitedNigeriaFlightData,
+  UnitedNigeriaFlight,
 } from "@/types/unitednigeria";
+import { extractFlightData } from "../utils";
 
 export class UnitedNigeriaService {
   private readonly BASE_URL =
@@ -67,18 +69,12 @@ export class UnitedNigeriaService {
       if (!response.ok) return [];
 
       const html = await response.text();
-      console.log(html);
-      return this.parseRecapPage(html);
+      // console.log(html);
+      return extractFlightData<UnitedNigeriaFlight>(html);
     } catch (error) {
       console.error("Failed to fetch recap page:", error);
       return [];
     }
-  }
-
-  private parseRecapPage(html: string): UnitedNigeriaFlightData {
-    // Implement parsing of the recap page HTML
-    // This will need to be updated based on the actual HTML structure
-    return [];
   }
 
   async searchFlights(params: UnitedNigeriaSearchParams): Promise<{
@@ -108,17 +104,17 @@ export class UnitedNigeriaService {
         );
       }
 
+      let flightsData: UnitedNigeriaFlightData = [];
       const data = await response.json();
+
       if (data?.d?.Result === "OK" && data?.d?.NextURL) {
-        const flights = await this.getFlightsFromRecap(data.d.NextURL);
-        return {
-          flightsData: flights,
-          url: data.d.NextURL,
-        };
+        flightsData = await this.getFlightsFromRecap(data.d.NextURL);
+      } else if (data?.d?.Result === "OK" && data?.d?.Data2) {
+        flightsData = extractFlightData<UnitedNigeriaFlight>(data.d.Data2);
       }
 
       return {
-        flightsData: [],
+        flightsData,
         url: response.url,
       };
     } catch (error) {

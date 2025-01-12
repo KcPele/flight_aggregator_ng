@@ -41,7 +41,7 @@ export default function FlightAggregateDisplay({
 
   const handleViewMore = () => setShowAll(!showAll);
   useEffect(() => {
-    const newFlights = results.reduce<CommonFlight[]>((acc, data) => {
+    const newFlights: CommonFlight[] = results.reduce((acc, data) => {
       if (!data) return acc;
 
       switch (data.provider) {

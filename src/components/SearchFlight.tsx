@@ -7,21 +7,11 @@ import { AirportSelector } from "@/components/AirportSelector";
 import { AirlineResponses, SearchParams } from "@/types/airport";
 import { useMultiFlightQueries } from "@/hooks/useMultiFlightQueries";
 import { DATE_FORMAT } from "@/lib/config";
-import AirPeace from "./flightcards/AirPeace";
-import ArikAir from "./flightcards/ArikAir";
-import Overland from "./flightcards/Overland";
-import ValueJet from "./flightcards/ValueJet";
-import GreenAfrica from "./flightcards/GreenAfrica";
-import IbomAir from "./flightcards/IbomAir";
-import { GreenAfricaResponse } from "@/types/greenafrica";
-import { ValueJetResponse } from "@/types/valuejet";
-import { OverlandResponse } from "@/types/overland";
-import { ArikAirResponse } from "@/types/arikair";
-import { IbomAirResponse } from "@/types/ibomair";
-import { AirPeaceResponse } from "@/types/airpeace";
+
 import { Plane, Loader2 } from "lucide-react";
 import CustomCalender from "./CustomCalender";
 import FlightAggregateDisplay from "./FlightAggregateDisplay";
+import DisplayAllFlightsCard from "./DisplayAllFlightsCard";
 
 export function SearchFlight() {
   const [searchParams, setSearchParams] = useState<SearchParams>({
@@ -63,30 +53,6 @@ export function SearchFlight() {
     setSearchParams((prev) => ({ ...prev, [key]: value }));
   };
 
-  const renderFlightCards = () => {
-    return results.map((result, index) => {
-      if (result === undefined) return;
-      if (result.flights && !result.flights.length) return;
-      switch (result?.provider) {
-        case "airpeace":
-          return <AirPeace key={index} data={result as AirPeaceResponse} />;
-        case "arikair":
-          return <ArikAir key={index} data={result as ArikAirResponse} />;
-        case "overland":
-          return <Overland key={index} data={result as OverlandResponse} />;
-        case "valuejet":
-          return <ValueJet key={index} data={result as ValueJetResponse} />;
-        case "greenafrica":
-          return (
-            <GreenAfrica key={index} data={result as GreenAfricaResponse} />
-          );
-        case "ibomair":
-          return <IbomAir key={index} data={result as IbomAirResponse} />;
-        default:
-          return null;
-      }
-    });
-  };
 
   return (
     <div className="space-y-8">
@@ -148,7 +114,7 @@ export function SearchFlight() {
       )}
       <FlightAggregateDisplay results={results} />
 
-      <div className="">{renderFlightCards()}</div>
+      <DisplayAllFlightsCard results={results} />
     </div>
   );
 }

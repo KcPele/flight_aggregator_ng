@@ -2,6 +2,7 @@ import { AirPeaceResponse } from "@/types/airpeace";
 import { ArikAirResponse } from "@/types/arikair";
 import { GreenAfricaResponse } from "@/types/greenafrica";
 import { IbomAirResponse } from "@/types/ibomair";
+import { MaxAirResponse } from "@/types/maxair";
 import { OverlandResponse } from "@/types/overland";
 import { ValueJetResponse } from "@/types/valuejet";
 
@@ -101,6 +102,19 @@ export const transformedValueJetFlights = (data: ValueJetResponse) => {
       arrivalTime,
       type: "STANDARD", // ValueJet typically offers standard fares
       price: flight.selectedDate?.price || flight.basePrice,
+      url: data.url,
+      provider: data.provider,
+    };
+  });
+};
+
+export const transformedMaxAirFlights = (data: MaxAirResponse) => {
+  return data.flights.map((flight) => {
+    return {
+      departureTime: `${flight.departureTime} ${flight.departureCity}`,
+      arrivalTime: `${flight.arrivalTime} ${flight.arrivalCity}`,
+      type: flight.class,
+      price: flight.price,
       url: data.url,
       provider: data.provider,
     };

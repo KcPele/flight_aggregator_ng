@@ -1,8 +1,11 @@
 import { AirPeaceResponse } from "./airpeace";
 import { ArikAirResponse } from "./arikair";
+import { AzmanAirResponse } from "./azmanair";
 import { GreenAfricaResponse } from "./greenafrica";
 import { IbomAirResponse } from "./ibomair";
+import { MaxAirResponse } from "./maxair";
 import { OverlandResponse } from "./overland";
+import { UnitedNigeriaResponse } from "./unitednigeria";
 import { ValueJetResponse } from "./valuejet";
 
 export interface Airport {
@@ -38,4 +41,7 @@ export type AirlineResponses = {
   ibomair: IbomAirResponse;
   overland: OverlandResponse;
   valuejet: ValueJetResponse;
+  maxair: MaxAirResponse;
+  unitednigeria: UnitedNigeriaResponse;
+  azmanair: AzmanAirResponse;
 };

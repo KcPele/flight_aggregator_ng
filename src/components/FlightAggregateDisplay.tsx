@@ -6,6 +6,7 @@ import {
   transformedArikAirFlights,
   transformedGreenAfricaFlights,
   transformedIbomAirFlights,
+  transformedMaxAirFlights,
   transformedOverlandFlights,
   transformedValueJetFlights,
 } from "@/lib/helper/transform";
@@ -15,6 +16,7 @@ import { GreenAfricaResponse } from "@/types/greenafrica";
 import { IbomAirResponse } from "@/types/ibomair";
 import { OverlandResponse } from "@/types/overland";
 import { ValueJetResponse } from "@/types/valuejet";
+import { MaxAirResponse } from "@/types/maxair";
 
 interface FlightAggregateDisplayProps {
   results: AirlineResponses[keyof AirlineResponses][];
@@ -77,6 +79,24 @@ export default function FlightAggregateDisplay({
             data as IbomAirResponse
           );
           return [...acc, ...transformedFlights];
+        }
+        case "maxair": {
+          const transformedFlights = transformedMaxAirFlights(
+            data as MaxAirResponse
+          );
+          return [...acc, ...transformedFlights];
+        }
+        case "unitednigeria": {
+          // const transformedFlights = transformedUnitedNigeriaFlights(
+          //   data as UnitedNigeriaResponse
+          // );
+          // return [...acc, ...transformedFlights];
+        }
+        case "azmanair": {
+          // const transformedFlights = transformedAzmanAirFlights(
+          //   data as AzmanAirResponse
+          // );
+          // return [...acc, ...transformedFlights];
         }
         default:
           return acc;

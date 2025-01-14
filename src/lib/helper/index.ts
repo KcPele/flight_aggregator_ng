@@ -11,6 +11,7 @@ export function formatCurrencyToNumber(amount: string) {
   try {
     return parseFloat(amount.replace(/[₦$,]/g, ""));
   } catch (error) {
+    console.error("Error formatting currency:", error);
     return amount;
   }
 }
@@ -24,6 +25,7 @@ export const formatToNaira = (amount: number | string): string => {
       minimumFractionDigits: 0,
     }).format(numAmount);
   } catch (error) {
+    console.error("Error formatting to Naira:", error);
     return amount.toString();
   }
 };

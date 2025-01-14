@@ -1,9 +1,8 @@
-// @ts-nocheck
 import React, { useRef, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
-import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
+import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader.js";
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { Group } from "three";
 
 function Airplane() {
@@ -22,7 +21,7 @@ function Airplane() {
         object.scale.set(0.008, 0.008, 0.008);
 
         // // Adjust rotation to face forward
-        object.rotation.set(0, 0, 4, 5); // Rotate 90 degrees around the Y-axis
+        object.rotation.set(0, 0, 4); // Rotate 90 degrees around the Y-axis
 
         // // Adjust position (optional)
         object.position.set(0, 0, 0);

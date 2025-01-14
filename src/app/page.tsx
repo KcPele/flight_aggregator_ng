@@ -7,9 +7,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-600/50 via-pink-500/50 to-orange-400/50">
       <HeroSection />
-      {/* Glassmorphism background elements */}
 
-      {/* Main search container */}
       <SearchFlight />
 
       {/* Footer */}

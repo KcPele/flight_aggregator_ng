@@ -49,9 +49,12 @@ export function SearchFlight() {
     refetchAll();
   };
 
-  const updateSearchParam = (key: keyof SearchParams, value: string) => {
-    setSearchParams((prev) => ({ ...prev, [key]: value }));
-  };
+  const updateSearchParam = useCallback(
+    (key: keyof SearchParams, value: string) => {
+      setSearchParams((prev) => ({ ...prev, [key]: value }));
+    },
+    [setSearchParams]
+  );
 
   return (
     <div className="space-y-8 w-full max-w-4xl mx-auto p-6 bg-gradient-to-b from-slate-900/50 to-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 shadow-xl">

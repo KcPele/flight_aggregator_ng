@@ -86,8 +86,8 @@ export const transformedOverlandFlights = (data: OverlandResponse) => {
     return {
       departureTime: `${flight.departureTime} ${flight.departureDate}`,
       arrivalTime: `${flight.arrivalTime} ${flight.arrivalDate}`,
-      type: lowestFare?.fareClass,
-      price: formatCurrencyToNumber(lowestFare?.price.toString()),
+      type: lowestFare?.fareClass || "ECONOMY", // Provide default value
+      price: formatCurrencyToNumber(lowestFare?.price.toString() || "0"),
       url: data.url,
       provider: data.provider,
     };

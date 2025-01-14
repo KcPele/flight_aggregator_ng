@@ -1,3 +1,4 @@
+//@ts-nocheck
 import chromium from "@sparticuz/chromium-min";
 import puppeteer from "puppeteer-core";
 import * as cheerio from "cheerio";

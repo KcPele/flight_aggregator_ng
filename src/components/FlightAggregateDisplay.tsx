@@ -19,6 +19,7 @@ import { OverlandResponse } from "@/types/overland";
 import { ValueJetResponse } from "@/types/valuejet";
 import { MaxAirResponse } from "@/types/maxair";
 import { UnitedNigeriaResponse } from "@/types/unitednigeria";
+import { formatToNaira } from "@/lib/helper";
 interface FlightAggregateDisplayProps {
   results: AirlineResponses[keyof AirlineResponses][];
 }
@@ -27,7 +28,7 @@ interface CommonFlight {
   departureTime: string;
   arrivalTime: string;
   type: string;
-  price: string;
+  price: string | number;
   url: string;
   provider: string;
 }
@@ -44,78 +45,84 @@ export default function FlightAggregateDisplay({
     const newFlights: CommonFlight[] = results.reduce((acc, data) => {
       if (!data) return acc;
 
+      let transformedFlights: CommonFlight[] = [];
+
       switch (data.provider) {
         case "airpeace": {
-          const transformedFlights = transformedAirPeaceFlights(
+          transformedFlights = transformedAirPeaceFlights(
             data as AirPeaceResponse
           );
-          return [...acc, ...transformedFlights];
+          break;
         }
         case "arikair": {
-          const transformedFlights = transformedArikAirFlights(
+          transformedFlights = transformedArikAirFlights(
             data as ArikAirResponse
           );
-          return [...acc, ...transformedFlights];
+          break;
         }
         case "overland": {
-          const transformedFlights = transformedOverlandFlights(
+          transformedFlights = transformedOverlandFlights(
             data as OverlandResponse
           );
-          return [...acc, ...transformedFlights];
+          break;
         }
         case "valuejet": {
-          const transformedFlights = transformedValueJetFlights(
+          transformedFlights = transformedValueJetFlights(
             data as ValueJetResponse
           );
-          return [...acc, ...transformedFlights];
+          break;
         }
         case "greenafrica": {
-          const transformedFlights = transformedGreenAfricaFlights(
+          transformedFlights = transformedGreenAfricaFlights(
             data as GreenAfricaResponse
           );
-          return [...acc, ...transformedFlights];
+          break;
         }
         case "ibomair": {
-          const transformedFlights = transformedIbomAirFlights(
+          transformedFlights = transformedIbomAirFlights(
             data as IbomAirResponse
           );
-          return [...acc, ...transformedFlights];
+          break;
         }
         case "maxair": {
-          const transformedFlights = transformedMaxAirFlights(
-            data as MaxAirResponse
-          );
-          return [...acc, ...transformedFlights];
+          transformedFlights = transformedMaxAirFlights(data as MaxAirResponse);
+          break;
         }
         case "unitednigeria": {
-          const transformedFlights = transformedUnitedNigeriaFlights(
+          transformedFlights = transformedUnitedNigeriaFlights(
             data as UnitedNigeriaResponse
           );
-          return [...acc, ...transformedFlights];
+          break;
         }
         case "azmanair": {
-          // const transformedFlights = transformedAzmanAirFlights(
-          //   data as AzmanAirResponse
-          // );
-          // return [...acc, ...transformedFlights];
+          // transformedFlights = transformedAzmanAirFlights(data as AzmanAirResponse);
+          break;
         }
         default:
-          return acc;
+          break;
       }
-    }, []);
+
+      // Filter out flights with NaN prices
+      const validFlights = transformedFlights.filter(
+        (flight) => !isNaN(parseFloat(flight.price.toString()))
+      );
+
+      return [...acc, ...validFlights];
+    }, [] as CommonFlight[]);
 
     setAllFlights(newFlights);
   }, [results]);
 
   // Sort flights by price
   const sortedFlights = [...allFlights].sort(
-    (a, b) => parseFloat(a.price) - parseFloat(b.price)
+    (a, b) => parseFloat(a.price.toString()) - parseFloat(b.price.toString())
   );
   const displayedFlights = showAll ? sortedFlights : sortedFlights.slice(0, 4);
 
   const toggleAccordion = (index: number) => {
     setExpandedIndex(index === expandedIndex ? null : index);
   };
+  console.log(sortedFlights);
 
   return (
     <div className="w-full p-4 bg-slate-800/30 backdrop-blur-sm rounded-xl border border-slate-700/50">
@@ -137,7 +144,8 @@ export default function FlightAggregateDisplay({
                 className="w-full p-4 bg-gray-700 text-left text-white flex justify-between items-center"
               >
                 <span>
-                  {flight.departureTime} - {flight.price}
+                  {flight.departureTime} -{" "}
+                  {formatToNaira(flight.price.toString())}
                 </span>
                 <span>{expandedIndex === index ? "−" : "+"}</span>
               </button>

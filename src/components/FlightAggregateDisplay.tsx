@@ -153,6 +153,9 @@ export default function FlightAggregateDisplay({
               {expandedIndex === index && (
                 <div className="p-4 bg-gray-900 text-gray-300">
                   <p>
+                    <strong>Flight:</strong> {flight.provider}
+                  </p>
+                  <p>
                     <strong>Type:</strong> {flight.type}
                   </p>
                   <p>

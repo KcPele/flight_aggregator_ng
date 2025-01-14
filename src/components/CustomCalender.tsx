@@ -14,13 +14,15 @@ const CustomCalendar = ({
   onDateChange,
 }: {
   date: Date | null;
-  onDateChange: (date: Date | undefined) => void;
+  onDateChange: (date: Date) => void;
 }) => {
   const [open, setOpen] = useState(false);
 
   const handleSelect = (selectedDate: Date | undefined) => {
-    onDateChange(selectedDate);
-    setOpen(false);
+    if (selectedDate) {
+      onDateChange(selectedDate);
+      setOpen(false);
+    }
   };
 
   const modifiers = {
@@ -45,7 +47,7 @@ const CustomCalendar = ({
       <PopoverContent className="w-auto p-0" align="start">
         <BaseCalendar
           mode="single"
-          selected={date || new Date()}
+          selected={date || undefined}
           onSelect={handleSelect}
           initialFocus
           modifiers={modifiers}

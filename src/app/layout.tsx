@@ -17,6 +17,28 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "CheapSearch",
   description: "find the best and most affordable flights in Nigeria",
+  keywords: [
+    "CheapSearch",
+    "cheap flights Nigeria",
+    "affordable flights Nigeria",
+    "flight deals Nigeria",
+    "discount flights",
+    "Nigeria air travel",
+    "flight comparison Nigeria",
+    "best flight prices",
+    "low-cost airlines Nigeria",
+    "flight booking Nigeria",
+    "budget travel",
+    "domestic flights Nigeria",
+    "international flights Nigeria",
+    "cheap air tickets",
+    "flight offers",
+    "cheap airfare",
+    "travel Nigeria",
+    "online flight booking",
+    "last-minute deals Nigeria",
+    "Nigeria flight search",
+  ],
 };
 
 export default function RootLayout({

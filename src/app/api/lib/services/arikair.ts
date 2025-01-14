@@ -92,36 +92,49 @@ export class ArikAirService {
     const flights: ArikAirFlightData = [];
 
     $(".js-journey").each((_, element) => {
-      const flight = {
-        departureTime: $(element)
-          .find(".left-info-block .time")
-          .first()
-          .text()
-          .trim(),
-        arrivalTime: $(element)
-          .find(".right-info-block .time")
-          .first()
-          .text()
-          .trim(),
-        departurePort: $(element).find(".left-info-block .port").text().trim(),
-        arrivalPort: $(element).find(".right-info-block .port").text().trim(),
-        flightNumber: $(element).find(".middle-block .flight-no").text().trim(),
-        flightDuration: $(element)
-          .find(".middle-block .flight-duration")
-          .text()
-          .trim(),
-        price: $(element)
-          .find(".price-best-offer, .price")
-          .first()
-          .text()
-          .replace("₦", "")
-          .replace(/,/g, "")
-          .trim(),
-        seatsRemaining: $(element).find(".remain-seat .count").text().trim(),
-      };
+      const priceText = $(element)
+        .find(".price-best-offer, .price")
+        .first()
+        .text()
+        .replace("₦", "")
+        .replace(/,/g, "")
+        .trim();
+      const price = parseFloat(priceText); // Convert price text to a number
 
-      if (flight.departureTime && flight.arrivalTime) {
-        flights.push(flight);
+      // Only proceed if the price is a valid number
+      if (!isNaN(price)) {
+        const flight = {
+          departureTime: $(element)
+            .find(".left-info-block .time")
+            .first()
+            .text()
+            .trim(),
+          arrivalTime: $(element)
+            .find(".right-info-block .time")
+            .first()
+            .text()
+            .trim(),
+          departurePort: $(element)
+            .find(".left-info-block .port")
+            .text()
+            .trim(),
+          arrivalPort: $(element).find(".right-info-block .port").text().trim(),
+          flightNumber: $(element)
+            .find(".middle-block .flight-no")
+            .text()
+            .trim(),
+          flightDuration: $(element)
+            .find(".middle-block .flight-duration")
+            .text()
+            .trim(),
+          price: priceText, // Use the original price text
+          seatsRemaining: $(element).find(".remain-seat .count").text().trim(),
+        };
+
+        // Only add the flight if it has valid departure and arrival times
+        if (flight.departureTime && flight.arrivalTime) {
+          flights.push(flight);
+        }
       }
     });
 

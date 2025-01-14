@@ -104,7 +104,7 @@ export default function FlightAggregateDisplay({
 
       // Filter out flights with NaN prices
       const validFlights = transformedFlights.filter(
-        (flight) => !isNaN(parseFloat(flight.price.toString()))
+        (flight) => !isNaN(parseFloat(flight.price?.toString()))
       );
 
       return [...acc, ...validFlights];
@@ -122,7 +122,6 @@ export default function FlightAggregateDisplay({
   const toggleAccordion = (index: number) => {
     setExpandedIndex(index === expandedIndex ? null : index);
   };
-  console.log(sortedFlights);
 
   return (
     <div className="w-full p-4 bg-slate-800/30 backdrop-blur-sm rounded-xl border border-slate-700/50">

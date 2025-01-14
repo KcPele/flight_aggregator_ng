@@ -97,62 +97,66 @@ export class ValueJetService {
           .first()
           .text()
           .trim();
-        const basePrice = priceText.match(/₦[\d,]+/)?.[0] || "";
+        const basePriceMatch = priceText.match(/₦[\d,]+/);
+        const basePrice = basePriceMatch ? basePriceMatch[0] : "";
 
-        // Flight info and status
-        const flightInfo = {
-          status: "",
-          statusUrl: "",
-        };
+        // Only proceed if the base price is valid
+        if (basePrice) {
+          // Flight info and status
+          const flightInfo = {
+            status: "",
+            statusUrl: "",
+          };
 
-        const statusLink = $(card).find("a[href*='flightradar24.com']");
-        if (statusLink.length) {
-          flightInfo.statusUrl = statusLink.attr("href") || "";
-          flightInfo.status = "Scheduled";
+          const statusLink = $(card).find("a[href*='flightradar24.com']");
+          if (statusLink.length) {
+            flightInfo.statusUrl = statusLink.attr("href") || "";
+            flightInfo.status = "Scheduled";
+          }
+
+          flights.push({
+            flightNumber,
+            departure: {
+              time: departureEl
+                .find(".text-primary.text-2xl.font-semibold")
+                .text()
+                .trim(),
+              period: departureEl
+                .find(".text-sm.font-semibold")
+                .last()
+                .text()
+                .trim(),
+              location: departureLocation,
+              airport: departureAirport,
+            },
+            arrival: {
+              time: arrivalEl
+                .find(".text-primary.text-2xl.font-semibold")
+                .text()
+                .trim(),
+              period: arrivalEl
+                .find(".text-sm.font-semibold")
+                .last()
+                .text()
+                .trim(),
+              location: arrivalLocation,
+              airport: arrivalAirport,
+            },
+            duration,
+            basePrice,
+            flightInfo,
+            selectedDate: selectedDate.date
+              ? {
+                  date: selectedDate.date,
+                  price: selectedDate.price,
+                }
+              : undefined,
+            otherDates: Object.entries(datePrices).map(([date, price]) => ({
+              date,
+              price,
+            })),
+          });
         }
-
-        flights.push({
-          flightNumber,
-          departure: {
-            time: departureEl
-              .find(".text-primary.text-2xl.font-semibold")
-              .text()
-              .trim(),
-            period: departureEl
-              .find(".text-sm.font-semibold")
-              .last()
-              .text()
-              .trim(),
-            location: departureLocation,
-            airport: departureAirport,
-          },
-          arrival: {
-            time: arrivalEl
-              .find(".text-primary.text-2xl.font-semibold")
-              .text()
-              .trim(),
-            period: arrivalEl
-              .find(".text-sm.font-semibold")
-              .last()
-              .text()
-              .trim(),
-            location: arrivalLocation,
-            airport: arrivalAirport,
-          },
-          duration,
-          basePrice,
-          flightInfo,
-          selectedDate: selectedDate.date
-            ? {
-                date: selectedDate.date,
-                price: selectedDate.price,
-              }
-            : undefined,
-          otherDates: Object.entries(datePrices).map(([date, price]) => ({
-            date,
-            price,
-          })),
-        });
       }
     );
 

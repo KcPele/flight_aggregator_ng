@@ -50,42 +50,44 @@ export class OverlandService {
             .text()
             .trim();
           const priceText = $fare.find(".btn-class").text().trim();
+          const price = this.parsePrice(priceText);
           const available = !$fare.find(".maxBookingClass").length;
-          // const rules = $fare.find(".flightChoice_tooltipNote").text().trim();
 
-          fareClasses.push({
-            flightNumber: flightInfo.find("strong").text().trim(),
-            fareClass,
-            price: this.parsePrice(priceText),
-            available,
-            duration: this.parseDuration(duration),
-            baggageAllowance: "",
-            // rules.match(/Baggage Allowance: ([^.]+)/)?.[1] || "",
-            fareRules: "",
-          });
+          if (!isNaN(price) && price > 0) {
+            fareClasses.push({
+              flightNumber: flightInfo.find("strong").text().trim(),
+              fareClass,
+              price,
+              available,
+              duration: this.parseDuration(duration),
+              baggageAllowance: "",
+              fareRules: "",
+            });
+          }
         });
 
-      const flight: OverlandFlightDetails = {
-        departureTime: departure.find("strong").first().text().trim(),
-        arrivalTime: arrival.find("strong").first().text().trim(),
-        departureDate: departure.find("span").text().split("|")[0].trim(),
-        arrivalDate: arrival.find("span").text().split("|")[0].trim(),
-        departureAirport: departure.find("span").text().split("|")[1].trim(),
-        arrivalAirport: arrival.find("span").text().split("|")[1].trim(),
-        flightNumber: flightInfo.find("strong").text().trim(),
-        operatingAirline: flightInfo.find("span").text().trim(),
-        duration: this.parseDuration(duration),
-        stops: viaText.includes("Non stop") ? [] : viaText.split(","),
-        via: viaText.includes("Via") ? [viaText.replace("Via ", "")] : [],
-        fareClasses,
-      };
+      if (fareClasses.length > 0) {
+        const flight: OverlandFlightDetails = {
+          departureTime: departure.find("strong").first().text().trim(),
+          arrivalTime: arrival.find("strong").first().text().trim(),
+          departureDate: departure.find("span").text().split("|")[0].trim(),
+          arrivalDate: arrival.find("span").text().split("|")[0].trim(),
+          departureAirport: departure.find("span").text().split("|")[1].trim(),
+          arrivalAirport: arrival.find("span").text().split("|")[1].trim(),
+          flightNumber: flightInfo.find("strong").text().trim(),
+          operatingAirline: flightInfo.find("span").text().trim(),
+          duration: this.parseDuration(duration),
+          stops: viaText.includes("Non stop") ? [] : viaText.split(","),
+          via: viaText.includes("Via") ? [viaText.replace("Via ", "")] : [],
+          fareClasses,
+        };
 
-      flights.push(flight);
+        flights.push(flight);
+      }
     });
 
     return flights;
   }
-
   async searchFlights(
     params: OverlandSearchParams,
     date: string

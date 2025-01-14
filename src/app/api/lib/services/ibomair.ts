@@ -113,20 +113,24 @@ export class IbomAirService {
       $(element)
         .find(".fare-container .currency-left-side")
         .each((_, fareElement) => {
-          const price = $(fareElement)
+          const priceText = $(fareElement)
             .text()
             .replace("₦", "")
             .replace(/,/g, "")
             .trim();
-          const fareType = $(fareElement)
-            .closest(".cabin-class-container")
-            .find(".cabin-header")
-            .text()
-            .trim();
-          fares.push({ fareType, price });
+
+          const price = parseFloat(priceText);
+          if (!isNaN(price)) {
+            const fareType = $(fareElement)
+              .closest(".cabin-class-container")
+              .find(".cabin-header")
+              .text()
+              .trim();
+            fares.push({ fareType, price: priceText });
+          }
         });
 
-      if (departureTime && arrivalTime) {
+      if (departureTime && arrivalTime && fares.length > 0) {
         flights.push({
           departure: {
             time: departureTime,

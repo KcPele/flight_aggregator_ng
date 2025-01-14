@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { MaxAirResponse, MaxAirFlight } from "@/types/maxair";
-import { Plane, Clock, MapPin, Ticket } from "lucide-react";
+import { Plane, Clock, Ticket } from "lucide-react";
 import Link from "next/link";
 
 interface Props {

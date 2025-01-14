@@ -47,22 +47,36 @@ export class GreenAfricaService {
     try {
       const res = await this.getDeepLink(params);
       const data = res.flightData;
+
+      // Return early if no flights are found
       if (!data.data.flights.flight?.length) {
         return {
           flightsData: [],
           url: res.url,
         };
       }
+
+      // Map and filter flights
       const flightsData = data.data.flights.flight
         .map((flight) => {
           const journey = flight.journey?.[0];
           if (!journey) return null;
 
+          // Find the lowest fare class
           const lowestClass = Object.values(journey.classes || {}).reduce(
             (min, curr) =>
               !min || curr.totalfare < min.totalfare ? curr : min,
             Object.values(journey.classes || {})[0]
           );
+
+          // Only proceed if the lowest fare class has a valid price
+          if (
+            !lowestClass ||
+            isNaN(parseFloat(lowestClass.totalfare.toString()))
+          ) {
+            return null;
+          }
+
           return {
             departureTime: journey.STD || "",
             arrivalTime: journey.STA || "",
@@ -70,22 +84,21 @@ export class GreenAfricaService {
             arrivalPort: journey.tocode,
             flightNumber: journey.fltnum,
             duration: "", // Calculate from STD and STA if needed
-            price: lowestClass?.totalfare.toString() || "N/A",
+            price: lowestClass.totalfare.toString(),
             fareTypes: Object.entries(journey.classes || {}).map(
               ([, classData]) => ({
                 name: classData.type,
                 price: classData.totalfare.toString(),
                 freeseats: classData.freeseats,
                 benefits: Object.entries(classData.services || {})
-
                   .filter(([, service]) => service.active)
-
                   .map(([, service]) => service.text),
               })
             ),
           };
         })
         .filter((flight): flight is GreenAfricaFlight => flight !== null);
+
       return { flightsData, url: res.url };
     } catch (error) {
       // console.error("Green Africa API Error:", error);

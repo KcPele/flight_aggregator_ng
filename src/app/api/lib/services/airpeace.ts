@@ -70,38 +70,46 @@ export class AirPeaceService {
       $(element)
         .find(".fare-container .fare-item")
         .each((_, fareElement) => {
-          const price = $(fareElement)
+          const priceText = $(fareElement)
             .find(".price-text-single-line")
             .text()
             .replace("₦", "")
             .replace(/,/g, "")
             .trim();
-          const fareType = $(fareElement)
-            .find(".mobile-cabin-info")
-            .text()
-            .trim();
-          const bestOffer =
-            $(fareElement).find(".badge-primary label").text().trim() || null;
+          const price = parseFloat(priceText); // Convert price text to a number
 
-          fares.push({ fareType, price, bestOffer });
+          // Only add the fare if the price is a valid number
+          if (!isNaN(price)) {
+            const fareType = $(fareElement)
+              .find(".mobile-cabin-info")
+              .text()
+              .trim();
+            const bestOffer =
+              $(fareElement).find(".badge-primary label").text().trim() || null;
+
+            fares.push({ fareType, price: priceText, bestOffer });
+          }
         });
 
-      flights.push({
-        departure: {
-          time: departureTime,
-          airport: departureAirport,
-          date: departureDate,
-        },
-        arrival: {
-          time: arrivalTime,
-          airport: arrivalAirport,
-          date: arrivalDate,
-        },
-        flightNumber,
-        duration,
-        stops,
-        fares,
-      });
+      // Only add the flight if it has at least one valid fare
+      if (fares.length > 0) {
+        flights.push({
+          departure: {
+            time: departureTime,
+            airport: departureAirport,
+            date: departureDate,
+          },
+          arrival: {
+            time: arrivalTime,
+            airport: arrivalAirport,
+            date: arrivalDate,
+          },
+          flightNumber,
+          duration,
+          stops,
+          fares,
+        });
+      }
     });
 
     return flights;

@@ -110,8 +110,10 @@ const Overland: React.FC<Props> = ({ data }) => {
         animate={{ opacity: 1 }}
         className="mb-6"
       >
-        <h2 className="text-2xl font-bold mb-2">Available Flights</h2>
-        <p className="text-gray-600">
+        <h2 className="text-2xl text-white/80 font-bold mb-2">
+          Overland Flights
+        </h2>
+        <p className="text-white/65">
           {data.searchParams.fromDst} to {data.searchParams.toDst}
         </p>
       </motion.div>
